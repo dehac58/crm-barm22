@@ -26,12 +26,6 @@ $jwtMiddleware = new JwtMiddleware();
 // Define the login endpoint
 $app->post('/login', [$jwtMiddleware, 'login'])->setName('login');
 
-// Define the public endpoint
-$app->get('/public', function ($request, $response, $args) {
-    $response->getBody()->write("This is a public endpoint");
-    return $response;
-})->setName('publicEndpoint');
-
 // Apply JWT middleware to specific routes
 $app->group('', function (App $app) use ($employeeController, $customerController) {
     $app->get('/employees', [$employeeController, 'getAllEmployees']);
