@@ -11,35 +11,27 @@ class JwtMiddleware
     private const SECRET = 'secret-key';
     private const ALGORITHM = ['HS256'];
 
+    private const AUTH_SHORTCUT = true;
+
     public function __invoke(Request $request, Response $response, callable $next)
     {
-        error_log('hallo');
+        error_log('WARNING: Authentication is deactivated!!!');
         $route = $request->getAttribute('route');
         $routeName = $route ? $route->getName() : '';
 
         // Exclude the specific route from JWT middleware
-        if ($routeName === 'publicEndpoint' || $routeName === 'login') {
+        if ($routeName === 'publicEndpoint' || $routeName === 'login' || self::AUTH_SHORTCUT === true) {
             return $next($request, $response);
         }
-        error_log('hallo');
-        /*
-        $authHeader = $request->getHeader('Authorization');
-        if (!$authHeader) {
-            return $response->withStatus(401)->write('Unauthorized1');
-        }
-        */
 
         $token = $request->getHeaderLine('api-token');
-        //$token = $request->getHeader('api-token')[0] ?? '';
-
-        error_log("token: ".$token);
 
         try {
             $key = new Key(self::SECRET, self::ALGORITHM[0]);
             $decoded = JWT::decode($token, $key);
             $request = $request->withAttribute('decoded_token_data', $decoded);
         } catch (Exception $e) {
-            return $response->withStatus(401)->write('Unauthorized2: ' . $e->getMessage());
+            return $response->withStatus(401)->write('Unauthorized: ' . $e->getMessage());
         }
 
         return $next($request, $response);
