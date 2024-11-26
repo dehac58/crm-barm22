@@ -14,9 +14,9 @@ class CustomerService {
         $this->addresses[] = new Address(2, '456 Elm St', 'Othertown', '54321');
         $this->addresses[] = new Address(3, '789 Oak St', 'Thistown', '67890');
 
-        $this->customerAddressLinks[] = new CustomerAddressLink(1, 1, true);
-        $this->customerAddressLinks[] = new CustomerAddressLink(1, 2, false);
-        $this->customerAddressLinks[] = new CustomerAddressLink(2, 3, true);
+        $this->customerAddressLinks[] = new CustomerAddressLink(1, 1, 1, true);
+        $this->customerAddressLinks[] = new CustomerAddressLink(2, 1, 2, false);
+        $this->customerAddressLinks[] = new CustomerAddressLink(3, 2, 3, true);
 
         $this->employeeService = $employeeService;
     }
