@@ -1,0 +1,29 @@
+[
+		{
+			"id": 0,
+			"firstName": "Max",
+			"lastName": "Mustermann",
+			"position": "Marktschreier",
+			"phoneNummer": "187",
+			"eMail": "max@mustermann.de",
+			"customerID": 187
+		},
+		{
+			"id": 1,
+			"firstName": "Peter",
+			"lastName": "Lustig",
+			"position": "Abseiler",
+			"phoneNummer": "069",
+			"eMail": "peter69@lustig.at",
+			"customerID": 69
+		},
+		{
+			"id": 2,
+			"firstName": "Hilga",
+			"lastName": "Bilbo",
+			"position": "Poledancer*innen",
+			"phoneNummer": "666666",
+			"eMail": "hilga@bilbobeutling.gov",
+			"customerID": 66
+		}
+]
