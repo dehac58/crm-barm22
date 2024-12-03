@@ -2,10 +2,10 @@ var m_data_get = (function () {
     "use strict";
     // Application object.
     const m_data_get = {
-        getEmployees: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employees", "../data/employees.json"); },
-        getEmployeeById: (do_next_func, eId) => { exchangeDataWithAjax(do_next_func, "employeeById", "../data/employees.json"); },
-        getCustomers: (do_next_func) => { exchangeDataWithAjax(do_next_func, "customers", "../data/customers.json"); },
-        getCustomerById: (do_next_func, cId) => { exchangeDataWithAjax(do_next_func, "customerById", "../data/customers.json"); },
+        getEmployees: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employees", "./data/employees.json"); },
+        getEmployeeById: (do_next_func, eId) => { exchangeDataWithAjax(do_next_func, "employeeById", "./data/employees.json"); },
+        getCustomers: (do_next_func) => { exchangeDataWithAjax(do_next_func, "customers", "./data/customers.json"); },
+        getCustomerById: (do_next_func, cId) => { exchangeDataWithAjax(do_next_func, "customerById", "./data/customers.json"); },
         getEmployeesByCustomerId: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employeesByCustomerId", ""); },
         getEmployeeByIdByCustomerId: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employeeByIdByCustomerId", ""); },
         getAddressesByCustomerId: (do_next_func) => { exchangeDataWithAjax(do_next_func, "addressesByCustomerId", ""); }

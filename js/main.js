@@ -41,7 +41,7 @@ async function openDetailPopup(userId) {
         const deleteButton = document.getElementById('delete-button');
         deleteButton.onclick = () => {
             deleteUser(userId);
-
+            
             // Modal schließen
             const modalElement = document.getElementById('detailModal');
             const modal = bootstrap.Modal.getInstance(modalElement);
