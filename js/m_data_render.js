@@ -126,7 +126,7 @@ var m_data_render = (function () {
                 `;
                 
             });  
-           
+            $("#table-head").html(tableHead); 
             $("#table-body").html(rows);
         } else {
             var alertHeading = "Error " + m_data_get.error.code;
