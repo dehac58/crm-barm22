@@ -41,7 +41,7 @@ var m_data_render = (function () {
                  rows += `
                     <tr>
                         <td><a href="#" class="id-link" data-id="${obj.id}">${obj.id}</a></td>
-                        <td>${obj.firstName} ${obj.lastName}</td>
+                        <td>${obj.companyName}</td>
                         <td>${obj.contactEmail}</td>
                         <td>${obj.contactPhone}</td>
                         <td class="text-center"><i class="bi bi-eye eye-address" data-id="${obj.id}"></i></td>
