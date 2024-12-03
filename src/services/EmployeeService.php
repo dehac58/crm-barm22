@@ -1,63 +1,67 @@
 <?php
 
-class EmployeeService {
-    private $employees = [];
+class EmployeeService
+{
+    private $pdo;
 
-    public function __construct() {
-        $this->employees[] = new Employee(1, 'John', 'Doe', 'Developer', '123-456-7890', 'john.doe@example.com', 1);
-        $this->employees[] = new Employee(2, 'Jane', 'Smith', 'Manager', '987-654-3210', 'jane.smith@example.com', 1);
-        $this->employees[] = new Employee(3, 'Chuck', 'Norris', 'CEO', '555-555-5555', 'chuck.norris@example.com', 2);
-    }
+    // Server- und Datenbank-Verbindungsinformationen
+    private $host = 'wappprojects.de';
+    private $dbname = 'd041c784';
+    private $username = 'd041c784';
+    private $password = '22i-dev_dbxaxs';
 
-    public function getAllEmployees() {
-        return $this->employees;
-    }
-
-    public function getEmployeeById($id) {
-        foreach ($this->employees as $employee) {
-            if ($employee->id === $id) {
-                return $employee;
-            }
+    // Konstruktor zur Initialisierung der Datenbankverbindung
+    public function __construct()
+    {
+        try {
+            $dsn = "mysql:host={$this->host};dbname={$this->dbname}";
+            $this->pdo = new PDO($dsn, $this->username, $this->password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die("Database connection failed: " . $e->getMessage());
         }
-        return null;
     }
 
-    public function createEmployee($data) {
-        $newEmployee = new Employee(
-            count($this->employees) + 1,
-            $data['firstName'],
-            $data['lastName'],
-            $data['position'],
-            $data['phoneNumber'],
-            $data['eMail'],
-            $data['customerID']
-        );
-        $this->employees[] = $newEmployee;
-        return $newEmployee;
+    // Insert new Employees
+    public function createEmployees($data)
+    {
+
+        $sql = "INSERT INTO Employees (firstName, lastName, position, phoneNumber, eMail, customerID) VALUES (:firstName, :lastName, :position, :phoneNumber, :eMail, :customerID)";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':firstName' => $data['firstName'], ':lastName' => $data['lastName'], ":position" => $data['position'], ":phoneNumber" => $data['phoneNumber'], ":eMail" => $data['eMail'], "customerID" => $data['customerID'] ]);
+        return $this->pdo->lastInsertId();
     }
 
-    public function updateEmployee($id, $data) {
-        foreach ($this->employees as &$employee) {
-            if ($employee->id === $id) {
-                $employee->firstName = $data['firstName'];
-                $employee->lastName = $data['lastName'];
-                $employee->position = $data['position'];
-                $employee->phoneNumber = $data['phoneNumber'];
-                $employee->eMail = $data['eMail'];
-                $employee->customerID = $data['customerID'];
-                return $employee;
-            }
-        }
-        return null;
+    // GET all Employees
+    public function getAllEmployees()
+    {
+        $sql = "SELECT * FROM Employees";
+        $stmt = $this->pdo->query($sql);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function deleteEmployee($id) {
-        foreach ($this->employees as $key => $employee) {
-            if ($employee->id === $id) {
-                unset($this->employees[$key]);
-                return true;
-            }
-        }
-        return false;
+    // Get Employee by ID
+    public function getEmployeeById($id)
+    {
+        $sql = "SELECT * FROM Employees WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    // UPDATE - Einen Benutzer aktualisieren
+    public function updateEmployee($id, $data)
+    {
+        $sql = "UPDATE Employees SET name = :name, email = :email WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([':id' => $data["id"], ':firstName' => $data['firstName'], ':lastName' => $data['lastName'], ":position" => $data['position'], ":phoneNumber" => $data['phoneNumber'], ":eMail" => $data['eMail'], "customerID" => $data['customerID']]);
+    }
+
+    // DELETE - Einen Employee löschen
+    public function deleteEmployee($id)
+    {
+        $sql = "DELETE FROM Employees WHERE id = :id";
+        $stmt = $this->pdo->prepare($sql);
+        return $stmt->execute([':id' => $id]);
     }
 }

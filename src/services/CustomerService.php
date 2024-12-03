@@ -1,136 +1,113 @@
 <?php
 
-class CustomerService {
-    private $customers = [];
-    private $addresses = [];
-    private $customerAddressLinks = [];
-    private $employeeService;
+class CustomerService
+{
+private $pdo;
 
-    public function __construct(EmployeeService $employeeService) {
-        $this->customers[] = new Customer(1, 'Tech Corp', 'contact@techcorp.com', '123-456-7890');
-        $this->customers[] = new Customer(2, 'Business Inc', 'info@businessinc.com', '987-654-3210');
+// Server- und Datenbank-Verbindungsinformationen
+private $host = 'wappprojects.de';
+private $dbname = 'd041c784';
+private $username = 'd041c784';
+private $password = '22i-dev_dbxaxs';
 
-        $this->addresses[] = new Address(1, '123 Main St', 'Anytown', '12345');
-        $this->addresses[] = new Address(2, '456 Elm St', 'Othertown', '54321');
-        $this->addresses[] = new Address(3, '789 Oak St', 'Thistown', '67890');
+// Konstruktor zur Initialisierung der Datenbankverbindung
+public function __construct()
+{
+try {
+$dsn = "mysql:host={$this->host};dbname={$this->dbname}";
+$this->pdo = new PDO($dsn, $this->username, $this->password);
+$this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+die("Database connection failed: " . $e->getMessage());
+}
+}
 
-        $this->customerAddressLinks[] = new CustomerAddressLink(1, 1, 1, true);
-        $this->customerAddressLinks[] = new CustomerAddressLink(2, 1, 2, false);
-        $this->customerAddressLinks[] = new CustomerAddressLink(3, 2, 3, true);
+// Insert new Customer
+public function createCustomer($data)
+{
+$sql = "INSERT INTO Costumers (companyName, contactEmail, contactPhone) VALUES (:companyName, :contactEmail, :contactPhone)";
+$stmt = $this->pdo->prepare($sql);
+$stmt->execute([':companyName' => $data['companyName'], ':contactEmail' => $data['contactEmail'], ":contactPhone" => $data['contactPhone']]);
+return $this->pdo->lastInsertId();
+}
 
-        $this->employeeService = $employeeService;
-    }
+// Insert new Adress
+public function createAdress($data)
+{
+$sql = "INSERT INTO Adresses (street, city, postalCode) VALUES (:street, :city, :postalCode)";
+$stmt = $this->pdo->prepare($sql);
+$stmt->execute([':street' => $data['street'], ':city' => $data['city'], ":postalCode" => $data['postalCode']]);
+return $this->pdo->lastInsertId();
+}
 
-    public function getAllCustomers() {
-        return $this->customers;
-    }
+// Get all Customer
+public function getAllCustomer()
+{
+$sql = "SELECT * FROM Customer";
+$stmt = $this->pdo->query($sql);
+return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
-    public function getCustomerById($id) {
-        foreach ($this->customers as $customer) {
-            if ($customer->id === $id) {
-                return $customer;
-            }
-        }
-        return null;
-    }
+// Get all Adresses
+public function getAllCustomers()
+{
+$sql = "SELECT * FROM Adresses";
+$stmt = $this->pdo->query($sql);
+return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
-    public function createCustomer($data) {
-        $newCustomer = new Customer(
-            count($this->customers) + 1,
-            $data['companyName'],
-            $data['contactEmail'],
-            $data['contactPhone']
-        );
-        $this->customers[] = $newCustomer;
-        return $newCustomer;
-    }
+// Get Customer by ID
+public function getCustomerById($id)
+{
+$sql = "SELECT * FROM Customer WHERE id = :id";
+$stmt = $this->pdo->prepare($sql);
+$stmt->execute([':id' => $id]);
+return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
-    public function updateCustomer($id, $data) {
-        foreach ($this->customers as &$customer) {
-            if ($customer->id === $id) {
-                $customer->companyName = $data['companyName'];
-                $customer->contactEmail = $data['contactEmail'];
-                $customer->contactPhone = $data['contactPhone'];
-                return $customer;
-            }
-        }
-        return null;
-    }
+// Get Adress by ID
+public function getAdressbyID($id)
+{
+$sql = "SELECT * FROM Adresses WHERE id = :id";
+$stmt = $this->pdo->prepare($sql);
+$stmt->execute([':id' => $id]);
+return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 
-    public function deleteCustomer($id) {
-        foreach ($this->customers as $key => $customer) {
-            if ($customer->id === $id) {
-                unset($this->customers[$key]);
-                return true;
-            }
-        }
-        return false;
-    }
+// UPDATE - Einen Customer aktualisieren
+public function updateCustomer($id, $data)
+{
+$sql = "UPDATE Customers SET companyName = :companyName, contactEmail = :contactEmail, contactPhone = :contactPhone WHERE id = :id";
+$stmt = $this->pdo->prepare($sql);
+return $stmt->execute([':id' => $data["id"], ':companyName' => $data['companyName'], ':contactEmail' => $data['contactEmail'], ":contactPhone" => $data['contactPhone']]);
+}
 
-    public function getCustomerEmployees($customerId): array
-    {
-        $employees = $this->employeeService->getAllEmployees();
-        $filteredEmployees = array_filter($employees, function($employee) use ($customerId) {
-            return $employee->customerID === $customerId;
-        });
-        return array_values($filteredEmployees);
-    }
+// UPDATE - Eine Adresse aktualisieren
+/*
+public function updateCustomer($id, $data)
+{
+$sql = "UPDATE Adresses SET street = :street, city = :city, postalCode = :postalCode WHERE id = :id";
+$stmt = $this->pdo->prepare($sql);
+return $stmt->execute([':id' => $data["id"], ':street' => $data['street'], ':city' => $data['city'], ":postalCode" => $data['postalCode']]);
+}
+*/
 
-    public function createAddress($data): CustomerAddressLink
-    {
-        $newAddress = new Address(
-            count($this->addresses) + 1,
-            $data['street'],
-            $data['city'],
-            $data['postalCode']
-        );
-        $this->addresses[] = $newAddress;
-        $newLink = new CustomerAddressLink($data['customerId'], $newAddress->id, $data['isHeadOffice']);
-        $this->customerAddressLinks[] = $newLink;
-        return $newLink;
-    }
+// DELETE - Einen Benutzer löschen
+public function deleteCustomer($id)
+{
+$sql = "DELETE FROM Customers WHERE id = :id";
+$stmt = $this->pdo->prepare($sql);
+return $stmt->execute([':id' => $id]);
 
-    public function updateAddress($customerId, $addressId, $data) {
-        foreach ($this->customerAddressLinks as &$link) {
-            if ($link->customerId === $customerId && $link->addressId === $addressId) {
-                $link->isHeadOffice = $data['isHeadOffice'];
-                return $link;
-            }
-        }
-        return null;
-    }
+//Adresse von dem Nutzer Löschen, wenn keine andererer Customer darauf zugreift
+}
 
-    public function deleteAddress($customerId, $addressId) {
-        foreach ($this->customerAddressLinks as $key => $link) {
-            if ($link->customerId === $customerId && $link->addressId === $addressId) {
-                unset($this->customerAddressLinks[$key]);
-                return true;
-            }
-        }
-        return false;
-    }
+// DELETE - Eine Adresse löschen
+public function deleteAdresses($id)
+{
+$sql = "DELETE FROM Adresses WHERE id = :id";
+$stmt = $this->pdo->prepare($sql);
+return $stmt->execute([':id' => $id]);
+}
 
-    public function getAddresses($customerId) {
-        $filteredLinks = array_filter($this->customerAddressLinks, function($link) use ($customerId) {
-            return $link->customerId === $customerId;
-        });
-        $result = array_map(function($link) {
-            $address = $this->findAddressById($link->addressId);
-            return [
-                'customerId' => $link->customerId,
-                'address' => $address,
-                'isHeadOffice' => $link->isHeadOffice
-            ];
-        }, $filteredLinks);
-        return array_values($result);
-    }
-
-    private function findAddressById($addressId) {
-        foreach ($this->addresses as $address) {
-            if ($address->id === $addressId) {
-                return $address;
-            }
-        }
-        return null;
-    }
 }
