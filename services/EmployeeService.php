@@ -40,7 +40,7 @@ class DatabaseService
     }
 
     // Get Employee by ID
-    public function getEmployeebyID($id)
+    public function getEmployeeById($id)
     {
         $sql = "SELECT * FROM Employees WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
