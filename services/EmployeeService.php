@@ -1,6 +1,6 @@
 <?php
 
-class DatabaseService
+class EmployeeService
 {
     private $pdo;
 
