@@ -23,7 +23,7 @@ class DatabaseService
     }
 
     // Insert new Customer
-    public function createCustomer($companyName, $contactEmail, $contactPhone)
+    public function createCustomer($data)
     {
         $sql = "INSERT INTO Costumers (companyName, contactEmail, contactPhone) VALUES (:companyName, :contactEmail, :contactPhone)";
         $stmt = $this->pdo->prepare($sql);
@@ -32,7 +32,7 @@ class DatabaseService
     }
 
     // Insert new Adress
-    public function createAdress($street, $city, $postalCode)
+    public function createAdress($data)
     {
         $sql = "INSERT INTO Adresses (street, city, postalCode) VALUES (:street, :city, :postalCode)";
         $stmt = $this->pdo->prepare($sql);
@@ -75,7 +75,7 @@ class DatabaseService
     }
 
     // UPDATE - Einen Customer aktualisieren
-    public function updateCustomer($id, $companyName, $contactEmail, $contactPhone)
+    public function updateCustomer($id, $data)
     {
         $sql = "UPDATE Customers SET companyName = :companyName, contactEmail = :contactEmail, contactPhone = :contactPhone WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
@@ -83,9 +83,9 @@ class DatabaseService
     }
 
     // UPDATE - Eine Adresse aktualisieren
-    public function updateCustomer($id, $street, $city, $postalCode)
+    public function updateCustomer($id, $data)
     {
-        $sql = "UPDATE Customers SET street = :street, city = :city, postalCode = :postalCode WHERE id = :id";
+        $sql = "UPDATE Adresses SET street = :street, city = :city, postalCode = :postalCode WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([':id' => $data["id"], ':street' => $data['street'], ':city' => $data['city'], ":postalCode" => $data['postalCode']]);
     }
@@ -108,29 +108,5 @@ class DatabaseService
         return $stmt->execute([':id' => $data["id"]]);
     }
 
-    getCustomerEmployees
 }
 
-// // Beispiel zur Verwendung der Klasse:
-
-// // Instanz der Klasse erstellen
-// $dbService = new DatabaseService();
-
-// // Benutzer erstellen
-// $userId = $dbService->createUser('Max Mustermann', 'max@example.com');
-// echo "User created with ID: $userId\n";
-
-// // Alle Benutzer abrufen
-// $users = $dbService->getAllUsers();
-// print_r($users);
-
-// // Einzelnen Benutzer abrufen
-// $user = $dbService->getUserById($userId);
-// print_r($user);
-
-// // Benutzer aktualisieren
-// $dbService->updateUser($userId, 'Max Mustermann', 'max.updated@example.com');
-
-// // Benutzer löschen
-// $dbService->deleteUser($userId);
-// echo "User deleted.\n";

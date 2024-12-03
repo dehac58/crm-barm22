@@ -23,8 +23,9 @@ class DatabaseService
     }
 
     // Insert new Employees
-    public function insertEmployees($firstName, $lastName, $position, $phoneNumber, $eMail, $customerID)
+    public function createEmployees($data)
     {
+
         $sql = "INSERT INTO Employees (firstName, lastName, position, phoneNumber, eMail, customerID) VALUES (:firstName, :lastName, :position, :phoneNumber, :eMail, :customerID)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':firstName' => $data['firstName'], ':lastName' => $data['lastName'], ":position" => $data['position'], ":phoneNumber" => $data['phoneNumber'], ":eMail" => data['eMail'], "customerID" => $data['customerID'] ]);
@@ -49,7 +50,7 @@ class DatabaseService
     }
 
     // UPDATE - Einen Benutzer aktualisieren
-    public function updateEmployee($id, $name, $email)
+    public function updateEmployee($id, $data)
     {
         $sql = "UPDATE Employees SET name = :name, email = :email WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
