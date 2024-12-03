@@ -99,7 +99,7 @@ class DatabaseService
     }
 
     // DELETE - Eine Adresse löschen
-    public function deleteUser($id)
+    public function deleteAdresses($id)
     {
         $sql = "DELETE FROM Adresses WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);

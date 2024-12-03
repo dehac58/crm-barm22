@@ -25,7 +25,7 @@ class DatabaseService
     // Insert new Employees
     public function insertEmployees($firstName, $lastName, $position, $phoneNumber, $eMail, $customerID)
     {
-        $sql = "INSERT INTO Costumers (firstName, lastName, position, phoneNumber, eMail, customerID) VALUES (:firstName, :lastName, :position, :phoneNumber, :eMail, :customerID)";
+        $sql = "INSERT INTO Employees (firstName, lastName, position, phoneNumber, eMail, customerID) VALUES (:firstName, :lastName, :position, :phoneNumber, :eMail, :customerID)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':firstName' => $data['firstName'], ':lastName' => $data['lastName'], ":position" => $data['position'], ":phoneNumber" => $data['phoneNumber'], ":eMail" => data['eMail'], "customerID" => $data['customerID'] ]);
         return $this->pdo->lastInsertId();
@@ -56,8 +56,8 @@ class DatabaseService
         return $stmt->execute([':id' => $data["id"], ':firstName' => $data['firstName'], ':lastName' => $data['lastName'], ":position" => $data['position'], ":phoneNumber" => $data['phoneNumber'], ":eMail" => data['eMail'], "customerID" => $data['customerID']]);
     }
 
-    // DELETE - Einen Benutzer löschen
-    public function deleteUser($id)
+    // DELETE - Einen Employee löschen
+    public function deleteEmployee($id)
     {
         $sql = "DELETE FROM Employees WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
@@ -65,26 +65,3 @@ class DatabaseService
     }
 }
 
-// // Beispiel zur Verwendung der Klasse:
-
-// // Instanz der Klasse erstellen
-// $dbService = new DatabaseService();
-
-// // Benutzer erstellen
-// $userId = $dbService->createUser('Max Mustermann', 'max@example.com');
-// echo "User created with ID: $userId\n";
-
-// // Alle Benutzer abrufen
-// $users = $dbService->getAllUsers();
-// print_r($users);
-
-// // Einzelnen Benutzer abrufen
-// $user = $dbService->getUserById($userId);
-// print_r($user);
-
-// // Benutzer aktualisieren
-// $dbService->updateUser($userId, 'Max Mustermann', 'max.updated@example.com');
-
-// // Benutzer löschen
-// $dbService->deleteUser($userId);
-// echo "User deleted.\n";
