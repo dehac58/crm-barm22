@@ -45,7 +45,7 @@ class EmployeeService
     {
         $sql = "SELECT * FROM Employees WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $data["id"]]);
+        $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -62,7 +62,8 @@ class EmployeeService
     {
         $sql = "DELETE FROM Employees WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([':id' => $data["id"]]);
+        return $stmt->execute([':id' => $id]);
     }
 }
+
 

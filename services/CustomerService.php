@@ -61,7 +61,7 @@ class CustomerService
     {
         $sql = "SELECT * FROM Customer WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $data["id"]]);
+        $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -70,7 +70,7 @@ class CustomerService
     {
         $sql = "SELECT * FROM Adresses WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $data["id"]]);
+        $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -83,11 +83,11 @@ class CustomerService
     }
 
     // UPDATE - Eine Adresse aktualisieren
-    public function updateCustomer($id, $data)
+    public function updateAdresses($id, $data)
     {
         $sql = "UPDATE Adresses SET street = :street, city = :city, postalCode = :postalCode WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([':id' => $data["id"], ':street' => $data['street'], ':city' => $data['city'], ":postalCode" => $data['postalCode']]);
+        return $stmt->execute([':id' => $id, ':street' => $data['street'], ':city' => $data['city'], ":postalCode" => $data['postalCode']]);
     }
 
     // DELETE - Einen Benutzer löschen
@@ -95,7 +95,7 @@ class CustomerService
     {
         $sql = "DELETE FROM Customers WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([':id' => $data["id"]]);
+        return $stmt->execute([':id' => $id]);
 
         //Adresse von dem Nutzer Löschen, wenn keine andererer Customer darauf zugreift
     }
@@ -105,8 +105,7 @@ class CustomerService
     {
         $sql = "DELETE FROM Adresses WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([':id' => $data["id"]]);
+        return $stmt->execute([':id' => $id]);
     }
 
 }
-
