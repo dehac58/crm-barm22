@@ -56,4 +56,4 @@ var m_data_put = (function () {
 
     return m_data_put;
 })();
-m_data_put.init();
+

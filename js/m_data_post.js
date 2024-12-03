@@ -57,4 +57,4 @@ var m_data_post = (function () {
 
     return m_data_post;
 })();
-m_data_post.init();
+

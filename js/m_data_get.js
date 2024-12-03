@@ -5,9 +5,9 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
 
     const m_data_get = {
         getEmployees: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employees", `${baseUrl}employees`); },
-        getEmployeeById: (do_next_func, eId) => { exchangeDataWithAjax(do_next_func, "employeeById", "./data/employees.json"); },
+        getEmployeeById: (do_next_func, eId) => { exchangeDataWithAjax(do_next_func, "employeeById", `${baseUrl}employees/${eId}`); },
         getCustomers: (do_next_func) => { exchangeDataWithAjax(do_next_func, "customers", `${baseUrl}customers`); },
-        getCustomerById: (do_next_func, cId) => { exchangeDataWithAjax(do_next_func, "customerById", "./data/customers.json"); },
+        getCustomerById: (do_next_func, cId) => { exchangeDataWithAjax(do_next_func, "customerById", `${baseUrl}customers/${cId}`); },
         getEmployeesByCustomerId: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employeesByCustomerId", ""); },
         getEmployeeByIdByCustomerId: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employeeByIdByCustomerId", ""); },
         getAddressesByCustomerId: (do_next_func) => { exchangeDataWithAjax(do_next_func, "addressesByCustomerId", ""); }
@@ -48,8 +48,8 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
 
             do_next_func();
         };
-        const username = "";
-        const password = "" 
+        const username = "crm";
+        const password = "22i-dev_pathxaxs" 
 
         $.ajax({
             method: "GET",
@@ -60,10 +60,8 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
             success: success_func,
             error: error_func,
         });
-        
     };
 
     return m_data_get;
 })();
 
-m_data_get.init();

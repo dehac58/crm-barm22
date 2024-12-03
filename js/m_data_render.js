@@ -56,9 +56,9 @@ var m_data_render = (function () {
             document.querySelectorAll('.id-link').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const userId = e.target.dataset.id;
+                    const cId = e.target.dataset.id;
                     var renderFunc = m_data_render.renderCustomerById
-                    m_data_get.getCustomerById(renderFunc, userId);
+                    m_data_get.getCustomerById(renderFunc, cId);
                 });
             });
         } else {
@@ -74,12 +74,12 @@ var m_data_render = (function () {
         var customer
 
         if (!m_data_get.finishedWithError) {
-            customer = m_data_get.dataStore.customerById[1];
+            customer = m_data_get.dataStore.customerById;
             console.log(customer)
 
             openDetailPopup(customer.id)
 
-            $("#detailModalLabel").text(`${customer.firstName} ${customer.lastName}`); 
+            $("#detailModalLabel").text(customer.companyName); 
             $("#modal-email").text(customer.contactEmail);
             $("#modal-phone").text(customer.contactPhone);
             //$("#modal-address").text(`${data.address.street}, ${data.address.city}`);
@@ -160,7 +160,7 @@ var m_data_render = (function () {
                  rows += `
                     <tr>
                         <td><a href="#" class="id-link" data-id="${obj.id}">${obj.id}</a></td>
-                        <td>${obj.firstName} ${obj.lastName}</td>
+                        <td>${obj.companyName}</td>
                         <td>${obj.contactEmail}</td>
                         <td>${obj.contactPhone}</td>
                         <td class="text-center"><i class="bi bi-eye eye-address" data-id="${obj.id}"></i></td>

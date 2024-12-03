@@ -57,4 +57,3 @@ var m_data_delete = (function () {
 
     return m_data_delete;
 })();
-m_data_delete.init();
