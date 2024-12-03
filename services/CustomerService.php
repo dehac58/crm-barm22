@@ -23,7 +23,7 @@ class DatabaseService
     }
 
     // Insert new Customer
-    public function insertCustomer($companyName, $contactEmail, $contactPhone)
+    public function createCustomer($companyName, $contactEmail, $contactPhone)
     {
         $sql = "INSERT INTO Costumers (companyName, contactEmail, contactPhone) VALUES (:companyName, :contactEmail, :contactPhone)";
         $stmt = $this->pdo->prepare($sql);
@@ -32,7 +32,7 @@ class DatabaseService
     }
 
     // Insert new Adress
-    public function insertAdresses($street, $city, $postalCode)
+    public function createAdress($street, $city, $postalCode)
     {
         $sql = "INSERT INTO Adresses (street, city, postalCode) VALUES (:street, :city, :postalCode)";
         $stmt = $this->pdo->prepare($sql);
@@ -49,7 +49,7 @@ class DatabaseService
     }
 
     // Get all Adresses
-    public function getAllCustomer()
+    public function getAllCustomers()
     {
         $sql = "SELECT * FROM Adresses";
         $stmt = $this->pdo->query($sql);
@@ -57,7 +57,7 @@ class DatabaseService
     }
 
     // Get Customer by ID
-    public function getCustomerbyID($id)
+    public function getCustomerById($id)
     {
         $sql = "SELECT * FROM Customer WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
@@ -91,11 +91,13 @@ class DatabaseService
     }
 
     // DELETE - Einen Benutzer löschen
-    public function deleteUser($id)
+    public function deleteCustomer($id)
     {
         $sql = "DELETE FROM Customers WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([':id' => $data["id"]]);
+
+        //Adresse von dem Nutzer Löschen, wenn keine andererer Customer darauf zugreift
     }
 
     // DELETE - Eine Adresse löschen
@@ -105,6 +107,8 @@ class DatabaseService
         $stmt = $this->pdo->prepare($sql);
         return $stmt->execute([':id' => $data["id"]]);
     }
+
+    getCustomerEmployees
 }
 
 // // Beispiel zur Verwendung der Klasse:
