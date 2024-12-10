@@ -41,7 +41,7 @@ var m_data_put = (function () {
             m_data_put.error.status = status;
             m_data_put.error.code = xhr.status;
             m_data_put.error.message = error;
-
+            console.log(error)
             do_next_func();
         };
 

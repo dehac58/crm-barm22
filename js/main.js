@@ -112,7 +112,7 @@ function deleteUser(userId) {
 document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) => {
 
     if (m_data_render.currentTable === "customers") {
-        console.log('hallo');
+        console.log('customers');
         document.querySelector("#modal-body").innerHTML = `
         <form id="add-form">
                         <div class="mb-3">
@@ -132,10 +132,8 @@ document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) =>
 
         console.log("Kunde wird hinzugefügt");
     } else if (m_data_render.currentTable === "employees") {
-
-        document.querySelector("#modal-content").innerHTML = `
-        `
-
+        console.log('employees')
+        document.querySelector("#modal-body").innerHTML = ``
     }
 });
 

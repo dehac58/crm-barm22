@@ -35,7 +35,7 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
     // get json data with ajax
 
 	const exchangeDataWithAjax = (do_next_func, routeKey, url) => {
-
+        m_data_get.finishedWithError = false;
 
         function success_func (result) {
            if (result !== null) {
@@ -56,7 +56,6 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
             m_data_get.error.code = xhr.status;
             m_data_get.error.message = error;
             console.log(error)
-
             do_next_func();
         };
         const username = "crm";

@@ -12,19 +12,17 @@ var m_data_render = (function () {
     
     var m_data_render = {};
 
-    m_data_render.currentTable = "customers";
+    m_data_render.currentTable = "";
 
 	m_data_render.init = function () {
 	};
 
 
 	m_data_render.renderCustomers = function () {
-
-        // do rendering
         var customers, rows = "";
 
         if (!m_data_get.finishedWithError) {
-
+            m_data_render.currentTable = "customers";
             // get saved data
             customers = m_data_get.dataStore.customers;
             
@@ -67,7 +65,6 @@ var m_data_render = (function () {
             document.querySelectorAll('.id-link').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    m_data_render.currentTable = "customers";
                     const cId = e.target.dataset.id;
                     var renderFunc = m_data_render.renderCustomerById
                     m_data_get.getCustomerById(renderFunc, cId);
@@ -78,7 +75,6 @@ var m_data_render = (function () {
                     e.preventDefault();
                     
                     const customerId = e.target.dataset.id;
-                    m_data_render.currentTable = "employees";
                     
                     var renderFunc = m_data_render.renderEmployees;
                     m_data_get.getEmployeesByCustomerId(renderFunc, customerId);
@@ -118,13 +114,9 @@ var m_data_render = (function () {
 
 
     m_data_render.renderEmployees = function () {
-
-        // do rendering
         var employees, rows = "";
-        
-
         if (!m_data_get.finishedWithError) {
-
+            m_data_render.currentTable = "employees";
             // get saved data
             employees = m_data_get.dataStore.employeesByCustomerId;
             console.log(employees)
@@ -157,7 +149,6 @@ var m_data_render = (function () {
         } else {
             var alertHeading = "Error " + m_data_get.error.code;
             var alertText = m_data_get.error.message;
-
             alert(alertHeading + ": " + alertText);
         }
     };
@@ -165,10 +156,11 @@ var m_data_render = (function () {
     // m_data_render.renderAddresses = function (addresses) {
 
     //     // do rendering
+    //     
     //     var jsonObj, rows;
 
     //     if (!m_data_get.finishedWithError) {
-
+    //         m_data_render.currentTable = "addresses";
     //         // get saved data
     //         jsonObj = m_data_get.dataStore;
 

@@ -44,7 +44,7 @@ var m_data_delete = (function () {
             m_data_delete.error.status = status;
             m_data_delete.error.code = xhr.status;
             m_data_delete.error.message = error;
-
+            console.log(error)
             do_next_func();
         };
 
