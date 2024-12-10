@@ -2,12 +2,13 @@ var m_data_delete = (function () {
     "use strict";
     
     // Application object.
+    const baseUrl = "https://dev.wappprojects.de/wiws22i/"
     const m_data_delete = {
-        deleteEmployeeById: (do_next_func) => {exchangeDataWithAjax(do_next_func, "")},
+        deleteEmployeeById: (do_next_func, employeeId) => {exchangeDataWithAjax(do_next_func, `${baseUrl}employees/${employeeId}`)},
 
-        deleteCustomerById: (do_next_func) => {exchangeDataWithAjax(do_next_func, "")},
+        deleteCustomerById: (do_next_func, customerId) => {exchangeDataWithAjax(do_next_func, `${baseUrl}customers/${customerId}`)},
 
-        deleteAddressById: (do_next_func) => {exchangeDataWithAjax(do_next_func, "")},
+        deleteAddressById: (do_next_func, customerId, addressId) => {exchangeDataWithAjax(do_next_func, `${baseUrl}customers/${customerId}/addresses/${addressId}`)},
 
     };
 
@@ -47,9 +48,15 @@ var m_data_delete = (function () {
             do_next_func();
         };
 
+        const username = "crm";
+        const password = "22i-dev_pathxaxs"
+
         $.ajax({
-            method: "Delete",
+            method: "DELETE",
             url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
+            },
             success: success_func,
             error: error_func,
         });

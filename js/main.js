@@ -1,10 +1,44 @@
 
 // Main JS File with document ready   
 
-$(document).ready(function(){
+$(document).ready(function () {
+    console.log("Hello")
 
-  var renderFunc = m_data_render.renderCustomers;
-  m_data_get.getCustomers(renderFunc);
+    var renderFunc = m_data_render.renderCustomers;
+
+    m_data_get.getCustomers(renderFunc);
+
+    document.querySelector("#submitBtn").addEventListener('click', (e) => {
+        const form = document.querySelector('#add-form');
+        if (!form) {
+            console.error('Formular nicht gefunden!');
+            return;
+        }
+
+        // Werte erfassen
+        const formData = new FormData(form);
+
+        // Konvertiere FormData in JSON
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        switch (m_data_render.currentTable) {
+            case "customer":
+                m_data_post.postCustomer(m_data_get.getCustomers(m_data_render.renderCustomers), data)
+                break;
+            case "employees":
+
+                break;
+
+            default:
+                break;
+        }
+
+        console.log(data); // Ausgabe der Daten
+    });
+
 });
 
 async function openDetailPopup(userId) {
@@ -41,7 +75,7 @@ async function openDetailPopup(userId) {
         const deleteButton = document.getElementById('delete-button');
         deleteButton.onclick = () => {
             deleteUser(userId);
-            
+
             // Modal schließen
             const modalElement = document.getElementById('detailModal');
             const modal = bootstrap.Modal.getInstance(modalElement);
@@ -64,14 +98,46 @@ async function openDetailPopup(userId) {
 
 // Benutzer löschen
 function deleteUser(userId) {
-  const tableBody = document.getElementById('table-body');
-  const rows = tableBody.querySelectorAll('tr');
-  rows.forEach(row => {
-      const cell = row.querySelector('td a');
-      if (cell && cell.dataset.id == userId) {
-          row.remove();
-      }
-  });
+    const tableBody = document.getElementById('table-body');
+    const rows = tableBody.querySelectorAll('tr');
+    rows.forEach(row => {
+        const cell = row.querySelector('td a');
+        if (cell && cell.dataset.id == userId) {
+            row.remove();
+        }
+    });
 }
+
+
+document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) => {
+
+    if (m_data_render.currentTable === "customers") {
+        console.log('hallo');
+        document.querySelector("#modal-body").innerHTML = `
+        <form id="add-form">
+                        <div class="mb-3">
+                            <label for="add-companyname" class="form-label">Firmenname</label>
+                            <input type="text" class="form-control" id="add-companyname" name="companyName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="add-email" class="form-label">E-Mail</label>
+                            <input type="email" class="form-control" id="add-email" name="contactEmail">
+                        </div>
+                        <div class="mb-3">
+                            <label for="add-phone" class="form-label">Telefonnummer</label>
+                            <input type="text" class="form-control" id="add-phone" name="contactPhone">
+                        </div>
+                    </form>
+        `;
+
+        console.log("Kunde wird hinzugefügt");
+    } else if (m_data_render.currentTable === "employees") {
+
+        document.querySelector("#modal-content").innerHTML = `
+        `
+
+    }
+});
+
 
 

@@ -5,13 +5,23 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
 
     const m_data_get = {
         getEmployees: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employees", `${baseUrl}employees`); },
-        getEmployeeById: (do_next_func, eId) => { exchangeDataWithAjax(do_next_func, "employeeById", `${baseUrl}employees/${eId}`); },
+        getEmployeeById: (do_next_func, employeeId) => { exchangeDataWithAjax(do_next_func, "employeeById", `${baseUrl}employees/${employeeId}`); },
         getCustomers: (do_next_func) => { exchangeDataWithAjax(do_next_func, "customers", `${baseUrl}customers`); },
-        getCustomerById: (do_next_func, cId) => { exchangeDataWithAjax(do_next_func, "customerById", `${baseUrl}customers/${cId}`); },
-        getEmployeesByCustomerId: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employeesByCustomerId", ""); },
-        getEmployeeByIdByCustomerId: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employeeByIdByCustomerId", ""); },
-        getAddressesByCustomerId: (do_next_func) => { exchangeDataWithAjax(do_next_func, "addressesByCustomerId", ""); }
+        getCustomerById: (do_next_func, customerId) => { exchangeDataWithAjax(do_next_func, "customerById", `${baseUrl}customers/${customerId}`); },
+        getEmployeesByCustomerId: (do_next_func, customerId) => { exchangeDataWithAjax(do_next_func, "employeesByCustomerId", `${baseUrl}customers/${customerId}/employees`); },
+        getEmployeeByIdByCustomerId: (do_next_func, customerId, employeeId) => { exchangeDataWithAjax(do_next_func, "employeeByIdByCustomerId", `${baseUrl}customers/${customerId}/employees/${employeeId}`); },
+        getAddressesByCustomerId: (do_next_func, customerId) => { exchangeDataWithAjax(do_next_func, "addressesByCustomerId", `${baseUrl}customers/${customerId}/addresses`); }
     };
+
+    // const m_data_get = {
+    //     getEmployees: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employees", "./data/employees.json"); },
+    //     getEmployeeById: (do_next_func, eId) => { exchangeDataWithAjax(do_next_func, "employeeById", "./data/employees.json"); },
+    //     getCustomers: (do_next_func) => { exchangeDataWithAjax(do_next_func, "customers", "./data/customers.json"); },
+    //     getCustomerById: (do_next_func, cId) => { exchangeDataWithAjax(do_next_func, "customerById", "./data/customers.json"); },
+    //     getEmployeesByCustomerId: (do_next_func, cId) => { exchangeDataWithAjax(do_next_func, "employeesByCustomerId", "./data/employees.json"); },
+    //     getEmployeeByIdByCustomerId: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employeeByIdByCustomerId", ""); },
+    //     getAddressesByCustomerId: (do_next_func) => { exchangeDataWithAjax(do_next_func, "addressesByCustomerId", ""); }
+    // };
 
     //************************************************
     // member variables
@@ -45,6 +55,7 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
             m_data_get.error.status = status;
             m_data_get.error.code = xhr.status;
             m_data_get.error.message = error;
+            console.log(error)
 
             do_next_func();
         };

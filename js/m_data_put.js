@@ -2,12 +2,11 @@ var m_data_put = (function () {
     "use strict";
     
     // Application object.
+    const baseUrl = "https://dev.wappprojects.de/wiws22i/"
     const m_data_put = {
-        putEmployeeById: (do_next_func) => {exchangeDataWithAjax(do_next_func, "")},
-
-        putCustomerById: (do_next_func) => {exchangeDataWithAjax(do_next_func, "")},
-
-        putAddressById: (do_next_func) => {exchangeDataWithAjax(do_next_func, "")},
+        putEmployeeById: (do_next_func, employeeId, data) => {exchangeDataWithAjax(do_next_func, `${baseUrl}employees/${employeeId}`, data)},
+        putCustomerById: (do_next_func, customerId, data) => {exchangeDataWithAjax(do_next_func, `${baseUrl}customers/${customerId}`, data)},
+        putAddressById: (do_next_func, customerId, addressId, data) => {exchangeDataWithAjax(do_next_func, `${baseUrl}customers/${customerId}/addresses/${addressId}`, data)},
     };
 
     //************************************************
@@ -46,9 +45,15 @@ var m_data_put = (function () {
             do_next_func();
         };
 
+        const username = "crm";
+        const password = "22i-dev_pathxaxs"
+
         $.ajax({
-            method: "Put",
+            method: "PUT",
             url: url,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
+            },
             success: success_func,
             error: error_func,
         });

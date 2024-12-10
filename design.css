@@ -1,0 +1,15 @@
+.buttonaddnewcustomer {
+    position: fixed;
+    bottom: 4%;
+    right: 4%;
+    z-index: 1000;
+    height: 5vw;
+    width: 5vw;
+    border-radius: 3vw;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 4vw;
+}
+
