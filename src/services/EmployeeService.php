@@ -50,13 +50,39 @@ class EmployeeService
     }
 
     // UPDATE - Einen Benutzer aktualisieren
+//    public function updateEmployee($id, $data)
+//    {
+//        $sql = "UPDATE Employees SET name = :name, email = :email WHERE id = :id";
+//        $stmt = $this->pdo->prepare($sql);
+//        return $stmt->execute([':id' => $data["id"], ':firstName' => $data['firstName'], ':lastName' => $data['lastName'], ":position" => $data['position'], ":phoneNumber" => $data['phoneNumber'], ":eMail" => $data['eMail'], "customerID" => $data['customerID']]);
+//    }
+    
+    // UPDATE - Einen Benutzer aktualisieren
     public function updateEmployee($id, $data)
     {
-        $sql = "UPDATE Employees SET name = :name, email = :email WHERE id = :id";
-        $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([':id' => $data["id"], ':firstName' => $data['firstName'], ':lastName' => $data['lastName'], ":position" => $data['position'], ":phoneNumber" => $data['phoneNumber'], ":eMail" => $data['eMail'], "customerID" => $data['customerID']]);
-    }
+    $sql = "UPDATE Employees
+            SET firstName = COALESCE(:firstName, firstName),
+                lastName = COALESCE(:lastName, lastName),
+                position = COALESCE(:position, position),
+                phoneNumber = COALESCE(:phoneNumber, phoneNumber),
+                eMail = COALESCE(:eMail, eMail),
+                customerID = COALESCE(:customerID, customerID)
+            WHERE id = :id";
 
+    $stmt = $this->pdo->prepare($sql);
+    $params = [
+        ':id' => $id,
+        ':firstName' => $data['firstName'] ?? null,
+        ':lastName' => $data['lastName'] ?? null,
+        ':position' => $data['position'] ?? null,
+        ':phoneNumber' => $data['phoneNumber'] ?? null,
+        ':eMail' => $data['eMail'] ?? null,
+        ':customerID' => $data['customerID'] ?? null
+    ];
+
+    return $stmt->execute($params);
+    }
+    
     // DELETE - Einen Employee löschen
     public function deleteEmployee($id)
     {
