@@ -23,10 +23,9 @@ $(document).ready(function () {
         formData.forEach((value, key) => {
             data[key] = value;
         });
-
         switch (m_data_render.currentTable) {
-            case "customer":
-                m_data_post.postCustomer(m_data_get.getCustomers(m_data_render.renderCustomers), data)
+            case "customers":
+                m_data_post.postCustomer(renderFunc, data)
                 break;
             case "employees":
 

@@ -20,7 +20,7 @@ var m_data_put = (function () {
     //************************************************
     // get json data with ajax
 
-	const exchangeDataWithAjax = (do_next_func, url) => {
+	const exchangeDataWithAjax = (do_next_func, url, data) => {
 
 
         function success_func (result) {
@@ -51,6 +51,7 @@ var m_data_put = (function () {
         $.ajax({
             method: "PUT",
             url: url,
+            data: data,
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
             },

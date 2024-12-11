@@ -19,6 +19,7 @@ var m_data_render = (function () {
 
 
 	m_data_render.renderCustomers = function () {
+        console.log('render customers')
         var customers, rows = "";
 
         if (!m_data_get.finishedWithError) {
