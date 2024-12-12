@@ -51,7 +51,7 @@ return $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Get all Adresses
 public function getAllCustomers()
 {
-$sql = "SELECT * FROM Adresses";
+$sql = "SELECT * FROM ";
 $stmt = $this->pdo->query($sql);
 return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -109,5 +109,26 @@ $sql = "DELETE FROM Adresses WHERE id = :id";
 $stmt = $this->pdo->prepare($sql);
 return $stmt->execute([':id' => $id]);
 }
+public function getCustomerEmployees($id)
+{
+    $sql = "SELECT *
+            FROM Employees  
+            WHERE customerID = :id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':id' => $id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
+public function getAdresses($id)
+{
+    $sql = "SELECT a.street, a.city, a.postalCode, ca.C_ID
+            FROM Customers_Adresses AS ca 
+            LEFT JOIN Adresses AS a ON ca.A_ID = a.id
+            WHERE ca.C_ID = :id";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->execute([':id' => $id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 }
+
+
