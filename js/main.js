@@ -87,11 +87,6 @@ $(document).ready(function () {
         // Werte erfassen
         const formData = new FormData(form);
 
-        // Konvertiere FormData in JSON
-        // const data = {};
-        // formData.forEach((value, key) => {
-        //     data[key] = value;
-        // });
 
         const cId = document.querySelector('#edit-id').value;
 
@@ -118,20 +113,6 @@ $(document).ready(function () {
 
 $("#delete-button")
 
-
-
-
-// // Benutzer löschen
-// function deleteUser(userId) {
-//     const tableBody = document.getElementById('table-body');
-//     const rows = tableBody.querySelectorAll('tr');
-//     rows.forEach(row => {
-//         const cell = row.querySelector('td a');
-//         if (cell && cell.dataset.id == userId) {
-//             row.remove();
-//         }
-//     });
-// }
 
 // Hinzugefügen von Wertem ----------------------------------------------------------------------------------------------------
 document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) => {
@@ -212,10 +193,17 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
         const cId = e.target.dataset.id;
         console.log(`ID geklickt: ${cId}`);
 
+        customer = m_data_get.dataStore.customerById;
+        e.preventDefault();
+
+        var renderFunc = m_data_render.renderCustomerById
+        m_data_get.getCustomerById(renderFunc, cId);
+
         if (m_data_render.currentTable === "customers") {
             console.log('customers');
+            console.log("m_data_render")
             document.querySelector("#modal-body-edit").innerHTML = `
-                    <p><strong>E-Mail:</strong> <span id="modal-email"></span></p>
+                    <p><strong>E-Mail:</strong> <span id="modal-email" ></span></p>
                     <p><strong>Telefonnummer:</strong> <span id="modal-phone"></span></p>
                     <div id="edit-section" class="mt-3" style="display: none;">
                         <h4>Bearbeite die Daten:</h6>
@@ -230,7 +218,7 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                                 </div>
                                 <div class="mb-3">
                                     <label for="edit-email" class="form-label">E-Mail</label>
-                                    <input type="email" class="form-control" id="edit-email" name="contactEmail">
+                                    <input type="email" class="form-control" id="edit-email"  name="contactEmail">
                                 </div>
                                 <div class="mb-3">
                                     <label for="edit-phone" class="form-label">Telefonnummer</label>
@@ -238,7 +226,8 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                                 </div>
                             </form>
         `;
-
+        
+        openDetailPopup(cId)
             console.log("Edit-Form wurde aufgerufen");
         } else if (m_data_render.currentTable === "employees") {
             console.log('employees')
@@ -255,50 +244,26 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
     }
 });
 
-async function openDetailPopup(userId) {
+async function openDetailPopup(cId) {
     try {
+        console.log("openDetailPopup")
+        
+       
         // Zeige den Bearbeiten-Button und setze die Werte in das Formular
         document.getElementById('edit-form').style.display = 'none';
         document.getElementById('edit-button').style.display = 'inline-block';
         document.getElementById('save-button').style.display = 'none';
 
         const editButton = document.getElementById('edit-button');
-        editButton.onclick = () => {
+        editButton.onclick = () => { 
+            
+            var renderFunc = m_data_render.renderCustomerByIdFill
+            m_data_get.getCustomerById(renderFunc, cId);
+            
             document.getElementById('edit-button').style.display = 'none';
             document.getElementById('save-button').style.display = 'inline-block';
             document.getElementById('edit-form').style.display = 'block';
         };
-
-        // const saveButton = document.getElementById('save-button');
-        // saveButton.onclick = () => {
-        //     // const updatedEmail = document.getElementById('contactEmail').value;
-        //     // const updatedPhone = document.getElementById('contactPhone').value;
-        //     // const updatedAddress = document.getElementById('companyname').value;
-
-        //     // Daten bearbeiten (hier simuliert)
-        //     // document.getElementById('modal-email').textContent = updatedEmail;
-        //     // document.getElementById('modal-phone').textContent = updatedPhone;
-        //     // document.getElementById('modal-address').textContent = updatedAddress;
-
-        //     // Verstecke das Bearbeiten-Formular und zeige die Buttons
-        //     document.getElementById('edit-form').style.display = 'none';
-        //     document.getElementById('edit-button').style.display = 'inline-block';
-        //     document.getElementById('save-button').style.display = 'none';
-        // };
-
-        // const deleteButton = document.getElementById('delete-button');
-        // deleteButton.onclick = () => {
-            
-
-        //     // Modal schließen
-        //     const modalElement = document.getElementById('detailModal');
-        //     const modal = bootstrap.Modal.getInstance(modalElement);
-        //     if (modal) {
-        //         modal.hide();
-        //     } else {
-        //         console.warn('Modal-Instanz konnte nicht gefunden werden.');
-        //     }
-        // };
 
         // Modal anzeigen
         const modalElement = document.getElementById('detailModal');

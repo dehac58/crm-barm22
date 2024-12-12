@@ -63,14 +63,7 @@ var m_data_render = (function () {
             $("#table-head").html(tableHead); 
             $("#table-body").html(rows);
 
-            document.querySelectorAll('.id-link').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const cId = e.target.dataset.id;
-                    var renderFunc = m_data_render.renderCustomerById
-                    m_data_get.getCustomerById(renderFunc, cId);
-                });
-            });
+
             document.querySelectorAll('.buttonemployee').forEach(button => {
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -95,15 +88,17 @@ var m_data_render = (function () {
 
         if (!m_data_get.finishedWithError) {
             customer = m_data_get.dataStore.customerById;
-            console.log(customer)
+            console.log("renderCustomerById")
 
-            
+            console.log('Kundendaten geladen:', customer);
 
             $("#detailModalLabel").text(customer.companyName);
             $("#modal-email").text(customer.contactEmail);
             $("#modal-phone").text(customer.contactPhone);
+        
+           
             
-            openDetailPopup(customer.id)
+            console.log("Kundenname", customer.companyName)
         } else {
             var alertHeading = "Error " + m_data_get.error.code;
             var alertText = m_data_get.error.message;
@@ -111,8 +106,28 @@ var m_data_render = (function () {
             alert(alertHeading + ": " + alertText);
         }
     };
+    m_data_render.renderCustomerByIdFill = function () {
 
+        var customer
 
+        if (!m_data_get.finishedWithError) {
+            customer = m_data_get.dataStore.customerById;
+            console.log("renderCustomerById")
+
+            console.log('Kundendaten geladen:', customer);
+
+            $("#edit-companyname").val(customer.companyName);
+            $("#edit-email").val(customer.contactEmail);
+            $("#edit-phone").val(customer.contactPhone);            
+        
+            console.log("Kundenname", customer.companyName)
+        } else {
+            var alertHeading = "Error " + m_data_get.error.code;
+            var alertText = m_data_get.error.message;
+
+            alert(alertHeading + ": " + alertText);
+        }
+    };
 
     m_data_render.renderEmployees = function () {
         var employees, rows = "";
