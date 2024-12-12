@@ -16,55 +16,33 @@
 
 <body>
 
-    <!-- Tabelle mit API-Daten -->
+    
     <div class="container mt-5">
         <h1 class="mb-4 text-center">Kundentabelle</h1>
         <table class="table table-hover table-bordered">
             <thead id="table-head" class="table-dark">
             </thead>
             <tbody id="table-body">
-                <!-- Dynamisch generierte Daten -->
             </tbody>
         </table>
     </div>
 
-    <!-- Detail-Pop-up Modal -->
+    <!-- Pop Up Bearbeiten -->
     <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="detailModalLabel">Details</h5>
-                    <!-- Nur das X zum Schließen -->
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <p><strong>E-Mail:</strong> <span id="modal-email"></span></p>
-                    <p><strong>Telefonnummer:</strong> <span id="modal-phone"></span></p>
+                <div class="modal-body" id="modal-body-edit">
+                   
 
-                    <!-- Editieren der Daten -->
-                    <div id="edit-section" class="mt-3" style="display: none;">
-                        <h4>Bearbeite die Daten:</h6>
-                            <form id="edit-form">
-                                <div class="mb-3">
-                                    <label for="edit-companyname" class="form-label">Firmenname</label>
-                                    <input type="text" class="form-control" id="edit-companyname">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="edit-email" class="form-label">E-Mail</label>
-                                    <input type="email" class="form-control" id="edit-email">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="edit-phone" class="form-label">Telefonnummer</label>
-                                    <input type="text" class="form-control" id="edit-phone">
-                                </div>
-                            </form>
-                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" id="delete-button">Löschen</button>
+                    <button type="button" class="btn btn-danger" id="delete-button" data-bs-dismiss="modal">Löschen</button>
                     <button type="button" class="btn btn-primary" id="edit-button">Bearbeiten</button>
-                    <button type="button" class="btn btn-success" id="save-button"
-                        style="display: none;">Speichern</button>
+                    <button type="button" class="btn btn-success" id="save-button" data-bs-dismiss="modal">Speichern</button>
                 </div>
             </div>
         </div>
