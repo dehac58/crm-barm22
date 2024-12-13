@@ -7,6 +7,7 @@ $(document).ready(function () {
     var renderFunc = m_data_render.renderCustomers;
 
     m_data_get.getCustomers(renderFunc);
+  
 // EventListener für hinzugefügen von Werten ----------------------------------------------------------------------------------
     document.querySelector("#submitBtn").addEventListener('click', (e) => {
         const form = document.querySelector('#add-form');
@@ -25,9 +26,9 @@ $(document).ready(function () {
         });
         switch (m_data_render.currentTable) {
             case "customers":
-                var renderFunc = m_data_render.renderCustomers;
-                console.log(data)
-                m_data_post.postCustomer(renderFunc, data)
+                  m_data_post.postCustomer(() => {
+                    m_data_get.getCustomers(m_data_render.renderCustomers);
+                }, data);
                 break;
             case "employees":
 
@@ -36,7 +37,7 @@ $(document).ready(function () {
             default:
                 break;
         }
-
+        
         console.log(data); // Ausgabe der Daten
     });
 // EventListener für bearbeiten von Werten ------------------------------------------------------------------------------------
@@ -111,8 +112,6 @@ $(document).ready(function () {
 
 });
 
-$("#delete-button")
-
 
 // Hinzugefügen von Wertem ----------------------------------------------------------------------------------------------------
 document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) => {
@@ -183,6 +182,7 @@ document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) =>
                     </form>
         `
     }
+
 });
 
 

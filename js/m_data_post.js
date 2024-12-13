@@ -5,7 +5,7 @@ var m_data_post = (function () {
     const baseUrl = "https://dev.wappprojects.de/wiws22i/"
     const m_data_post = {
         postEmployee: (do_next_func, data) => {exchangeDataWithAjax(do_next_func, `${baseUrl}employees`, data)},
-        postCustomer: (do_next_func, data) => {exchangeDataWithAjax(m_data_get.getCustomers(do_next_func), `${baseUrl}customers`, data)},
+        postCustomer: (do_next_func, data) => {exchangeDataWithAjax(do_next_func, `${baseUrl}customers`, data)},
         postAddress: (do_next_func, customerId, data) => {exchangeDataWithAjax(do_next_func, `${baseUrl}customers/${customerId}/addresses`, data)}
     };
 
@@ -21,7 +21,7 @@ var m_data_post = (function () {
     // get json data with ajax
 
 	const exchangeDataWithAjax = (do_next_func, url, data) => {
-
+        console.log("exchangeDataWithAjax", do_next_func)
         function success_func (result) {
            if (result !== null) {
                 m_data_post.data = result;
@@ -30,7 +30,6 @@ var m_data_post = (function () {
             }
             do_next_func();
         };
-
         function error_func (xhr, status, error) {
             console.log("XHR", xhr);
             m_data_post.data = {};
