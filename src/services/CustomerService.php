@@ -180,7 +180,7 @@ return $stmt->execute([':id' => $data["id"], ':street' => $data['street'], ':cit
             LEFT JOIN Addresses AS a ON ca.A_ID = a.id
             WHERE ca.C_ID = :customerId";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $customerId]);
+        $stmt->execute([':customerId' => $customerId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
