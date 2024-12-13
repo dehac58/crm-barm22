@@ -132,8 +132,26 @@ return $stmt->execute([':id' => $data["id"], ':street' => $data['street'], ':cit
 
         //Adresse von dem Nutzer Löschen, wenn keine andererer Customer darauf zugreift
     }
-        //Adresse von dem Nutzer Löschen, wenn keine andererer Customer darauf zugreift
-    
+
+    // DELETE - Eine Adresse löschen
+    public function deleteAddress($customerId, $addressId)
+    {
+        $sqlCustomerAddresses = "DELETE FROM Customers_Addresses
+                              WHERE C_ID = :customerId
+                              AND A_ID = :addressId";
+        $stmtCustomerAddresses = $this->pdo->prepare($sqlCustomerAddresses);
+        $stmtCustomerAddresses->execute([
+            ':customerId' => $customerId,
+            ':addressId' => $addressId
+        ]);
+        $sqlAddresses = "DELETE FROM Addresses
+                      WHERE id = :addressId";
+        $stmtAddresses = $this->pdo->prepare($sqlAddresses);
+        $stmtAddresses->execute([
+            ':addressId' => $addressId
+        ]);
+        return $stmtAddresses->fetch(PDO::FETCH_ASSOC);
+    }
 
     public function getCustomerEmployees($id)
     {
@@ -155,37 +173,16 @@ return $stmt->execute([':id' => $data["id"], ':street' => $data['street'], ':cit
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-public function getAdresses($id)
-{
-    $sql = "SELECT a.street, a.city, a.postalCode, ca.C_ID
-            FROM Customers_Adresses AS ca 
-            LEFT JOIN Adresses AS a ON ca.A_ID = a.id
-            WHERE ca.C_ID = :id";
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->execute([':id' => $id]);
-    return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
- // DELETE - Eine Adresse löschen
-    public function deleteAddress($customerId, $addressId)
+    public function getAddresses($customerId)
     {
-        $sqlCustomerAddresses = "DELETE FROM Customers_Addresses
-                                 WHERE C_ID = :customerId
-                                 AND A_ID = :addressId";
-        $stmtCustomerAddresses = $this->pdo->prepare($sqlCustomerAddresses);
-        $stmtCustomerAddresses->execute([
-            ':customerId' => $customerId,
-            ':addressId' => $addressId
-        ]);
-        $sqlAddresses = "DELETE FROM Addresses
-                         WHERE id = :addressId";
-        $stmtAddresses = $this->pdo->prepare($sqlAddresses);
-        $stmtAddresses->execute([
-            ':addressId' => $addressId
-        ]);
-        return $stmtAddresses->fetch(PDO::FETCH_ASSOC);
+        $sql = "SELECT a.street, a.city, a.postalCode, ca.C_ID
+            FROM Customers_Addresses AS ca 
+            LEFT JOIN Addresses AS a ON ca.A_ID = a.id
+            WHERE ca.C_ID = :customerId";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->execute([':id' => $customerId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
-
-
-
 }
+
+
