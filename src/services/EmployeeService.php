@@ -23,12 +23,12 @@ class EmployeeService
     }
 
     // Insert new Employees
-    public function createEmployees($data)
+    public function createEmployee($data)
     {
 
         $sql = "INSERT INTO Employees (firstName, lastName, position, phoneNumber, eMail, customerID) VALUES (:firstName, :lastName, :position, :phoneNumber, :eMail, :customerID)";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':firstName' => $data['firstName'], ':lastName' => $data['lastName'], ":position" => $data['position'], ":phoneNumber" => $data['phoneNumber'], ":eMail" => $data['eMail'], "customerID" => $data['customerID'] ]);
+        $stmt->execute([':firstName' => $data['firstName'], ':lastName' => $data['lastName'], ":position" => $data['position'], ":phoneNumber" => $data['phoneNumber'], ":eMail" => $data['eMail'], "customerID" => $data['customerID']]);
         return $this->pdo->lastInsertId();
     }
 
@@ -56,11 +56,11 @@ class EmployeeService
 //        $stmt = $this->pdo->prepare($sql);
 //        return $stmt->execute([':id' => $data["id"], ':firstName' => $data['firstName'], ':lastName' => $data['lastName'], ":position" => $data['position'], ":phoneNumber" => $data['phoneNumber'], ":eMail" => $data['eMail'], "customerID" => $data['customerID']]);
 //    }
-    
+
     // UPDATE - Einen Benutzer aktualisieren
     public function updateEmployee($id, $data)
     {
-    $sql = "UPDATE Employees
+        $sql = "UPDATE Employees
             SET firstName = COALESCE(:firstName, firstName),
                 lastName = COALESCE(:lastName, lastName),
                 position = COALESCE(:position, position),
@@ -69,20 +69,20 @@ class EmployeeService
                 customerID = COALESCE(:customerID, customerID)
             WHERE id = :id";
 
-    $stmt = $this->pdo->prepare($sql);
-    $params = [
-        ':id' => $id,
-        ':firstName' => $data['firstName'] ?? null,
-        ':lastName' => $data['lastName'] ?? null,
-        ':position' => $data['position'] ?? null,
-        ':phoneNumber' => $data['phoneNumber'] ?? null,
-        ':eMail' => $data['eMail'] ?? null,
-        ':customerID' => $data['customerID'] ?? null
-    ];
+        $stmt = $this->pdo->prepare($sql);
+        $params = [
+            ':id' => $id,
+            ':firstName' => $data['firstName'] ?? null,
+            ':lastName' => $data['lastName'] ?? null,
+            ':position' => $data['position'] ?? null,
+            ':phoneNumber' => $data['phoneNumber'] ?? null,
+            ':eMail' => $data['eMail'] ?? null,
+            ':customerID' => $data['customerID'] ?? null
+        ];
 
-    return $stmt->execute($params);
+        return $stmt->execute($params);
     }
-    
+
     // DELETE - Einen Employee löschen
     public function deleteEmployee($id)
     {
