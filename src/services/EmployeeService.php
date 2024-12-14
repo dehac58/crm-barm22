@@ -23,7 +23,7 @@ class EmployeeService
     }
 
     // Insert new Employees
-    public function createEmployees($data)
+    public function createEmployee($data)
     {
 
         $sql = "INSERT INTO Employees (firstName, lastName, position, phoneNumber, eMail, customerID) VALUES (:firstName, :lastName, :position, :phoneNumber, :eMail, :customerID)";

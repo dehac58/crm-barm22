@@ -32,7 +32,7 @@ class CustomerService
     }
 
     // Insert new Adress
-    public function createAddress($data)
+    public function createAddress($customerId, $data)
     {
         $sqlAddresses = "INSERT INTO Addresses (street, city, postalCode) VALUES (:street, :city, :postalCode)";
         $stmtAddresses = $this->pdo->prepare($sqlAddresses);
@@ -40,7 +40,7 @@ class CustomerService
         $A_ID = $this->pdo->lastInsertId();
         $sqlCustomerAddresses = "INSERT INTO Customers_Addresses (isHeadOffice, C_ID, A_ID) VALUES (:isHeadOffice, :C_ID, $A_ID)";
         $stmtCustomerAddresses = $this->pdo->prepare($sqlCustomerAddresses);
-        $stmtCustomerAddresses->execute([':isHeadOffice' => $data['isHeadOffice'], ':C_ID' => $data['C_ID']]);
+        $stmtCustomerAddresses->execute([':isHeadOffice' => $data['isHeadOffice'], ':C_ID' => $customerId]);
         return $this->pdo->lastInsertId();
     }
 
@@ -101,32 +101,38 @@ class CustomerService
     // DELETE - Einen Benutzer löschen
     public function deleteCustomer($id)
     {
-        $sqlEmployeeUpdate = "UPDATE Employees SET customerNumber = NULL WHERE customerNumber = :customerId";
-        $stmtEmployeeUpdate = $this->pdo->prepare($sqlEmployeeUpdate);
-        $stmtEmployeeUpdate->execute([':customerId' => $id]);
-
-        $sqlCustomerAddresses = "DELETE FROM Customers_Addresses WHERE C_ID = :customerId";
-        $stmtCustomerAddresses = $this->pdo->prepare($sqlCustomerAddresses);
-        $stmtCustomerAddresses->execute([':customerId' => $id]);
-
         $sqlGetAddresses = "SELECT A_ID FROM Customers_Addresses WHERE C_ID = :customerId";
         $stmtGetAddresses = $this->pdo->prepare($sqlGetAddresses);
         $stmtGetAddresses->execute([':customerId' => $id]);
         $addresses = $stmtGetAddresses->fetchAll(PDO::FETCH_ASSOC);
 
+        $uniqueAddresses = [];
         foreach ($addresses as $address) {
             $addressId = $address['A_ID'];
             $sqlCheckAddress = "SELECT COUNT(*) as count FROM Customers_Addresses WHERE A_ID = :addressId";
             $stmtCheckAddress = $this->pdo->prepare($sqlCheckAddress);
             $stmtCheckAddress->execute([':addressId' => $addressId]);
-            $result = $stmtCheckAddress->fetch();
+            $result = $stmtCheckAddress->fetch(PDO::FETCH_ASSOC);
 
             if ($result['count'] == 1) {
-                $sqlDeleteAddress = "DELETE FROM Addresses WHERE id = :addressId";
-                $stmtDeleteAddress = $this->pdo->prepare($sqlDeleteAddress);
-                $stmtDeleteAddress->execute([':addressId' => $addressId]);
+                $uniqueAddresses[] = $addressId;
             }
         }
+
+        $sqlCustomerAddresses = "DELETE FROM Customers_Addresses WHERE C_ID = :customerId";
+        $stmtCustomerAddresses = $this->pdo->prepare($sqlCustomerAddresses);
+        $stmtCustomerAddresses->execute([':customerId' => $id]);
+
+        foreach ($uniqueAddresses as $addressId) {
+            $sqlDeleteAddress = "DELETE FROM Addresses WHERE id = :addressId";
+            $stmtDeleteAddress = $this->pdo->prepare($sqlDeleteAddress);
+            $stmtDeleteAddress->execute([':addressId' => $addressId]);
+        }
+
+        $sqlEmployeeUpdate = "UPDATE Employees SET customerID = NULL WHERE customerID = :customerId";
+        $stmtEmployeeUpdate = $this->pdo->prepare($sqlEmployeeUpdate);
+        $stmtEmployeeUpdate->execute([':customerId' => $id]);
+
         $sqlDeleteCustomer = "DELETE FROM Customers WHERE id = :id";
         $stmtDeleteCustomer = $this->pdo->prepare($sqlDeleteCustomer);
         return $stmtDeleteCustomer->execute([':id' => $id]);
@@ -139,18 +145,18 @@ class CustomerService
             WHERE customerID = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id' => $id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public function getAddresses($customerId)
     {
-        $sql = "SELECT a.street, a.city, a.postalCode, ca.C_ID
+        $sql = "SELECT a.street, a.city, a.postalCode, a.id
             FROM Customers_Addresses AS ca 
             LEFT JOIN Addresses AS a ON ca.A_ID = a.id
             WHERE ca.C_ID = :customerId";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':customerId' => $customerId]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // DELETE - Eine Adresse löschen
@@ -173,7 +179,7 @@ class CustomerService
             $stmtAddresses = $this->pdo->prepare($sqlAddresses);
             $stmtAddresses->execute([':addressId' => $addressId]);
 
-            return $stmtAddresses->fetch(PDO::FETCH_ASSOC);
+            return $stmtAddresses->rowCount() > 0;
         } else {
             $sqlCustomerAddresses = "DELETE FROM Customers_Addresses WHERE C_ID = :customerId AND A_ID = :addressId";
             $stmtCustomerAddresses = $this->pdo->prepare($sqlCustomerAddresses);
@@ -181,7 +187,7 @@ class CustomerService
                 ':customerId' => $customerId,
                 ':addressId' => $addressId
             ]);
-            return $stmtCustomerAddresses->fetch(PDO::FETCH_ASSOC);
+            return $stmtCustomerAddresses->rowCount() > 0;
         }
     }
 
@@ -197,11 +203,15 @@ class CustomerService
         if ($result['count'] > 1) {
             $sqlInsert = "INSERT INTO Addresses (street, city, postalCode) VALUES (:street, :city, :postalCode)";
             $stmtInsert = $this->pdo->prepare($sqlInsert);
-            $stmtInsert->execute([
+            $successInsert = $stmtInsert->execute([
                 ':street' => $data['street'] ?? null,
                 ':city' => $data['city'] ?? null,
                 ':postalCode' => $data['postalCode'] ?? null
             ]);
+
+            if (!$successInsert) {
+                return false;
+            }
 
             $newAddressId = $this->pdo->lastInsertId();
 
@@ -209,12 +219,12 @@ class CustomerService
                                     SET A_ID = :newAddressId
                                     WHERE C_ID = :customerId AND A_ID = :oldAddressId";
             $stmtUpdateCustomer = $this->pdo->prepare($sqlUpdateCustomer);
-            $stmtUpdateCustomer->execute([
+            $successUpdate = $stmtUpdateCustomer->execute([
                 ':newAddressId' => $newAddressId,
                 ':customerId' => $customerId,
                 ':oldAddressId' => $addressId
             ]);
-            return $stmtUpdateCustomer->fetch(PDO::FETCH_ASSOC);
+            return $successUpdate;
 
         } else {
             $sqlUpdate = "UPDATE Addresses
@@ -224,13 +234,18 @@ class CustomerService
                 WHERE id = :id";
 
             $stmtUpdate = $this->pdo->prepare($sqlUpdate);
-            $stmtUpdate->execute([
+            $successUpdate = $stmtUpdate->execute([
                 ':id' => $addressId,
                 ':street' => $data['street'] ?? null,
                 ':city' => $data['city'] ?? null,
                 ':postalCode' => $data['postalCode'] ?? null
             ]);
-            return $stmtUpdate->fetch(PDO::FETCH_ASSOC);
+
+            if ($successUpdate && $stmtUpdate->rowCount() > 0) {
+                return true;
+            } else {
+                return false;
+            }
         }
        
 }
