@@ -17,9 +17,9 @@ var m_data_render = (function () {
 	m_data_render.init = function () {
 	};
 
-
+// m_data_render.renderCustomers ----------------------------------------------------------------------------------------------
 	m_data_render.renderCustomers = function () {
-        console.log('render customers')
+        
         var customers, rows = "";
 
         if (!m_data_get.finishedWithError) {
@@ -70,8 +70,7 @@ var m_data_render = (function () {
                     
                     const customerId = e.target.dataset.id;
                     
-                    var renderFunc = m_data_render.renderEmployees;
-                    m_data_get.getEmployeesByCustomerId(renderFunc, customerId);
+                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, customerId);
                 });
             });
         } else {
@@ -82,15 +81,16 @@ var m_data_render = (function () {
         }
     };
 
+// render edit-Popup Customer -------------------------------------------------------------------------------------------------
     m_data_render.renderCustomerById = function () {
 
         var customer
+        
 
         if (!m_data_get.finishedWithError) {
             customer = m_data_get.dataStore.customerById;
-            console.log("renderCustomerById")
+        
 
-            console.log('Kundendaten geladen:', customer);
 
             $("#detailModalLabel").text(customer.companyName);
             $("#modal-email").text(customer.contactEmail);
@@ -98,7 +98,7 @@ var m_data_render = (function () {
         
            
             
-            console.log("Kundenname", customer.companyName)
+         
         } else {
             var alertHeading = "Error " + m_data_get.error.code;
             var alertText = m_data_get.error.message;
@@ -112,15 +112,12 @@ var m_data_render = (function () {
 
         if (!m_data_get.finishedWithError) {
             customer = m_data_get.dataStore.customerById;
-            console.log("renderCustomerById")
 
-            console.log('Kundendaten geladen:', customer);
 
             $("#edit-companyname").val(customer.companyName);
             $("#edit-email").val(customer.contactEmail);
             $("#edit-phone").val(customer.contactPhone);            
         
-            console.log("Kundenname", customer.companyName)
         } else {
             var alertHeading = "Error " + m_data_get.error.code;
             var alertText = m_data_get.error.message;
@@ -129,14 +126,62 @@ var m_data_render = (function () {
         }
     };
 
+// render edit-Popup Employees ------------------------------------------------------------------------------------------------
+
+m_data_render.renderEmployeesById = function () {
+
+  
+    var employee
+
+    if (!m_data_get.finishedWithError) {
+        var employee = m_data_get.dataStore.employeeById;
+
+
+        const fullName = `${employee.firstName} ${employee.lastName}`; 
+        $("#detailModalLabel").text(fullName);
+        $("#modal-email").text(employee.eMail);
+        $("#modal-phone").text(employee.phoneNumber);
+        $("#modal-position").text(employee.position);
+
+
+    } else {
+        var alertHeading = "Error " + m_data_get.error.code;
+        var alertText = m_data_get.error.message;
+
+        alert(alertHeading + ": " + alertText);
+    }
+};
+m_data_render.renderEmployeesByIdFill = function () {
+
+    var employee
+
+    if (!m_data_get.finishedWithError) {
+        var employee = m_data_get.dataStore.employeeById;
+        
+
+        // $("#id").val(employee.id);
+        $("#edit-employeesfirstName").val(employee.firstName);
+        $("#edit-employeeslastName").val(employee.lastName);
+        $("#edit-employeesMail").val(employee.eMail);
+        $("#edit-employeesphoneNumber").val(employee.phoneNumber);
+        $("#edit-employeesposition").val(employee.position);       
+    
+    } else {
+        var alertHeading = "Error " + m_data_get.error.code;
+        var alertText = m_data_get.error.message;
+
+        alert(alertHeading + ": " + alertText);
+    }
+};
+
+
+// render Employees -----------------------------------------------------------------------------------------------------------
     m_data_render.renderEmployees = function () {
         var employees, rows = "";
         if (!m_data_get.finishedWithError) {
             m_data_render.currentTable = "employees";
-            // get saved data
             employees = m_data_get.dataStore.employeesByCustomerId;
-            console.log(employees)
-
+            console.log("Ich bin eine Biene Teil 2")
             const tableHead = `
                 <tr>
                     <th>ID</th>
@@ -151,9 +196,9 @@ var m_data_render = (function () {
                 const fullName = `${emp.firstName} ${emp.lastName}`;
                 rows += `
                     <tr>
-                        <td>${emp.id}</td>
+                        <td><a href="#" class="id-link" data-id="${emp.id}">${emp.id}</a></td>
                         <td>${fullName}</td>
-                        <td>${emp.email}</td>
+                        <td>${emp.eMail}</td>
                         <td>${emp.position}</td>
                         <td>${emp.phoneNumber}</td>
                     </tr>
@@ -168,6 +213,8 @@ var m_data_render = (function () {
             alert(alertHeading + ": " + alertText);
         }
     };
+
+    
 
     // m_data_render.renderAddresses = function (addresses) {
 

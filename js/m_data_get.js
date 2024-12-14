@@ -6,7 +6,7 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
     const m_data_get = {
         getEmployees: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employees", `${baseUrl}employees`); },
         getEmployeeById: (do_next_func, employeeId) => { exchangeDataWithAjax(do_next_func, "employeeById", `${baseUrl}employees/${employeeId}`); },
-        getCustomers: (do_next_func) => {console.log('probieren geht über studieren'), exchangeDataWithAjax(do_next_func, "customers", `${baseUrl}customers`); },
+        getCustomers: (do_next_func) => {exchangeDataWithAjax(do_next_func, "customers", `${baseUrl}customers`); },
         getCustomerById: (do_next_func, customerId) => { exchangeDataWithAjax(do_next_func, "customerById", `${baseUrl}customers/${customerId}`); },
         getEmployeesByCustomerId: (do_next_func, customerId) => { exchangeDataWithAjax(do_next_func, "employeesByCustomerId", `${baseUrl}customers/${customerId}/employees`); },
         getEmployeeByIdByCustomerId: (do_next_func, customerId, employeeId) => { exchangeDataWithAjax(do_next_func, "employeeByIdByCustomerId", `${baseUrl}customers/${customerId}/employees/${employeeId}`); },
@@ -44,6 +44,7 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
                 m_data_get.dataStore[routeKey] = {};
             }
 
+            
             do_next_func();
 
         };
