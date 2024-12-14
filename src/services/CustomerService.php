@@ -25,7 +25,7 @@ class CustomerService
     // Insert new Customer
     public function createCustomer($data)
     {
-        $sql = "INSERT INTO Costumers (companyName, contactEmail, contactPhone) VALUES (:companyName, :contactEmail, :contactPhone)";
+        $sql = "INSERT INTO Customers (companyName, contactEmail, contactPhone) VALUES (:companyName, :contactEmail, :contactPhone)";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':companyName' => $data['companyName'], ':contactEmail' => $data['contactEmail'], ":contactPhone" => $data['contactPhone']]);
         return $this->pdo->lastInsertId();
@@ -55,7 +55,7 @@ class CustomerService
     // Get all Adresses
     public function getAllAddresses()
     {
-        $sql = "SELECT * FROM Addresses";
+        $sql = "SELECT * FROM Adresses";
         $stmt = $this->pdo->query($sql);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -70,9 +70,9 @@ class CustomerService
     }
 
     // Get Adress by ID
-    public function getAddressbyID($id)
+    public function getAdressbyID($id)
     {
-        $sql = "SELECT * FROM Addresses WHERE id = :id";
+        $sql = "SELECT * FROM Adresses WHERE id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -81,9 +81,21 @@ class CustomerService
     // UPDATE - Einen Customer aktualisieren
     public function updateCustomer($id, $data)
     {
-        $sql = "UPDATE Customers SET companyName = :companyName, contactEmail = :contactEmail, contactPhone = :contactPhone WHERE id = :id";
+        $sql = "UPDATE Customers
+            SET companyName = COALESCE(:companyName, companyName),
+                contactEmail = COALESCE(:contactEmail, contactEmail),
+                contactPhone = COALESCE(:contactPhone, contactPhone)
+            WHERE id = :id";
+
         $stmt = $this->pdo->prepare($sql);
-        return $stmt->execute([':id' => $data["id"], ':companyName' => $data['companyName'], ':contactEmail' => $data['contactEmail'], ":contactPhone" => $data['contactPhone']]);
+        $params = [
+            ':id' => $id,
+            ':companyName' => $data['companyName'] ?? null,
+            ':contactEmail' => $data['contactEmail'] ?? null,
+            ':contactPhone' => $data['contactPhone'] ?? null,
+        ];
+
+        return $stmt->execute($params);
     }
 
     // DELETE - Einen Benutzer löschen
@@ -137,7 +149,7 @@ class CustomerService
             LEFT JOIN Addresses AS a ON ca.A_ID = a.id
             WHERE ca.C_ID = :customerId";
         $stmt = $this->pdo->prepare($sql);
-        $stmt->execute([':id' => $customerId]);
+        $stmt->execute([':customerId' => $customerId]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
@@ -173,8 +185,7 @@ class CustomerService
         }
     }
 
-    // UPDATE Address
-    public function updateAddress($customerId, $addressId, $data)
+    public function updateAddress($addressId, $customerId, $data)
     {
         $sqlCheck = "SELECT COUNT(*) as count 
                         FROM Customers_Addresses 
@@ -221,6 +232,8 @@ class CustomerService
             ]);
             return $stmtUpdate->fetch(PDO::FETCH_ASSOC);
         }
-    }
+       
+}
+
 
 }
