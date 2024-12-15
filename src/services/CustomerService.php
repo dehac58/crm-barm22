@@ -201,12 +201,13 @@ class CustomerService
         $result = $stmtCheck->fetch();
 
         if ($result['count'] > 1) {
-            $sqlInsert = "INSERT INTO Addresses (street, city, postalCode) VALUES (:street, :city, :postalCode)";
+            $sqlInsert = "INSERT INTO Addresses (street, city, postalCode, isHeadOffice) VALUES (:street, :city, :postalCode, :isHeadOffice)";
             $stmtInsert = $this->pdo->prepare($sqlInsert);
             $successInsert = $stmtInsert->execute([
                 ':street' => $data['street'] ?? null,
                 ':city' => $data['city'] ?? null,
-                ':postalCode' => $data['postalCode'] ?? null
+                ':postalCode' => $data['postalCode'] ?? null,
+                ':isHeadOffice' => $data['isHeadOffice'] ?? null
             ]);
 
             if (!$successInsert) {
@@ -230,7 +231,8 @@ class CustomerService
             $sqlUpdate = "UPDATE Addresses
                 SET street = COALESCE(:street, street),
                     city = COALESCE(:city, city),
-                    postalCode = COALESCE(:postalCode, postalCode)
+                    postalCode = COALESCE(:postalCode, postalCode),
+                    isHeadOffice = COALESCE(:isHeadOffice, isHeadOffice)
                 WHERE id = :id";
 
             $stmtUpdate = $this->pdo->prepare($sqlUpdate);
@@ -238,7 +240,8 @@ class CustomerService
                 ':id' => $addressId,
                 ':street' => $data['street'] ?? null,
                 ':city' => $data['city'] ?? null,
-                ':postalCode' => $data['postalCode'] ?? null
+                ':postalCode' => $data['postalCode'] ?? null,
+                ':isHeadOffice' => $data['isHeadOffice'] ?? null
             ]);
 
             if ($successUpdate && $stmtUpdate->rowCount() > 0) {
