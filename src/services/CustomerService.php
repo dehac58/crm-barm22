@@ -41,7 +41,7 @@ class CustomerService
         $sqlCustomerAddresses = "INSERT INTO Customers_Addresses (isHeadOffice, C_ID, A_ID) VALUES (:isHeadOffice, :C_ID, $A_ID)";
         $stmtCustomerAddresses = $this->pdo->prepare($sqlCustomerAddresses);
         $stmtCustomerAddresses->execute([':isHeadOffice' => $data['isHeadOffice'], ':C_ID' => $customerId]);
-        return $this->pdo->lastInsertId();
+        return $A_ID;
     }
 
     // Get all Customer
