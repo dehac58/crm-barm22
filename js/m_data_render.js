@@ -17,6 +17,12 @@ var m_data_render = (function () {
 	m_data_render.init = function () {
 	};
 
+
+    // member variables
+    m_data_render.customerId = null;
+
+
+
 // m_data_render.renderCustomers ----------------------------------------------------------------------------------------------
 	m_data_render.renderCustomers = function () {
         
@@ -69,9 +75,9 @@ var m_data_render = (function () {
             document.querySelectorAll('.buttonemployee').forEach(button => {
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const customerId = e.target.dataset.id;
+                    m_data_render.customerId = e.target.dataset.id;
                     
-                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, customerId);
+                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
                 });
             });
 
@@ -79,9 +85,9 @@ var m_data_render = (function () {
             document.querySelectorAll('.buttonaddress').forEach(button => {
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
-                    const customerId = e.target.dataset.id;
+                    m_data_render.customerId = e.target.dataset.id;
                     
-                    m_data_get.getAddressesByCustomerId(m_data_render.renderAddresses, customerId);
+                    m_data_get.getAddressesByCustomerId(m_data_render.renderAddresses, m_data_render.customerId);
                 });
             });
         } else {

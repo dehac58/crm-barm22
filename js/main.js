@@ -30,9 +30,9 @@ $(document).ready(function () {
                 }, data);
                 break;
             case "employees":
-
+                data['customerID'] = m_data_render.customerId;
                 m_data_post.postEmployee(() => {
-                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, selectedCustomerId);
+                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
                 }, data);
 
 
@@ -63,25 +63,19 @@ $(document).ready(function () {
             data[key] = value;
         });
 
-        const cId = document.querySelector('#edit-id').value;
-        
-
         switch (m_data_render.currentTable) {
             case "customers":
                 
-          
-
                 m_data_put.putCustomerById(() => {
                     m_data_get.getCustomers(m_data_render.renderCustomers);
-                }, cId, data);
+                }, m_data_get.dataStore.customerById.id, data);
 
                 break;
             case "employees":
               
-                const eId = document.querySelector('#employeeId').value;
                 m_data_put.putEmployeeById(() => {
-                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, cId);
-                }, eId, data);
+                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
+                }, m_data_get.dataStore.employeeById.id, data);
 
 
                 break;
@@ -102,29 +96,16 @@ $(document).ready(function () {
             return;
         }
 
-        // Werte erfassen
-const cId = document.querySelector('#edit-id').value;
-
-
-
         switch (m_data_render.currentTable) {
             case "customers":
-                
-   
-
-
                 m_data_delete.deleteCustomerById(() => {
                     m_data_get.getCustomers(m_data_render.renderCustomers);
-                }, cId);
+                }, m_data_get.dataStore.customerById.id);
                 break;
             case "employees":
-                const eId = document.querySelector('#employeeId').value;
-
-              console.log("Ich bin eine Biene Teil:", eId)
-
                 m_data_delete.deleteEmployeeById(() => {
-                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, cId);
-                }, eId);
+                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
+                }, m_data_get.dataStore.employeeById.id);
 
 
                 break;
@@ -136,17 +117,6 @@ const cId = document.querySelector('#edit-id').value;
         console.log("löschen erfolgreich");
     });
 
-});
-
-let selectedCustomerId = null; // Globale Variable für die CustomerID
-
-document.querySelector('#table-body').addEventListener('click', (e) => {
-    if (e.target && e.target.classList.contains('buttonemployee')) {
-        e.preventDefault();
-        selectedCustomerId = e.target.dataset.id; // Speichere die CustomerID
-       
-        m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, selectedCustomerId);
-    }
 });
 
 // Hinzugefügen von Wertem ----------------------------------------------------------------------------------------------------
@@ -195,12 +165,7 @@ document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) =>
                         <div class="mb-3">
                             <label for="add-employeesMail" class="form-label">E-Mail Adresse</label>
                             <input type="email" class="form-control" id="add-employeesMail" name="eMail">
-                        </div>
-
-                        <input type="hidden"  class="form-control" id="id" name="id">
-
-                        <input type="hidden"  class="form-control" id="add-customerID" value="${selectedCustomerId}" name="customerID">
-                        
+                        </div>                    
                     </form>
         `
     }
@@ -251,7 +216,6 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                     </div> 
 
         <form id="edit-form">
-                                <input type="hidden"  class="form-control" id="edit-id" value="${cId}" name="id">
 
                                 <div class="mb-3">
                                     <label for="edit-companyname" class="form-label">Firmenname</label>
@@ -297,7 +261,6 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                     </div> 
 
                 <form id="edit-form">
-                        <input type="hidden"  class="form-control" id="edit-id" value="${selectedCustomerId}" name="customerID">
 
                         <div class="mb-3">
                             <label for="add-employeesfirstName" class="form-label">Vorname</label>
@@ -319,8 +282,6 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                             <label for="add-employeesMail" class="form-label">E-Mail Adresse</label>
                             <input type="email" class="form-control" id="edit-employeesMail" name="eMail">
                         </div>
-
-                        <input type="hidden"  class="form-control" id="employeeId" value="${cId}" name="id">
                             </form>
         `;
 
@@ -340,8 +301,6 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
 async function openDetailPopup(cId) {
     try {
         console.log("openDetailPopup")
-
-
         // Zeige den Bearbeiten-Button und setze die Werte in das Formular
         document.getElementById('edit-form').style.display = 'none';
         document.getElementById('edit-button').style.display = 'inline-block';

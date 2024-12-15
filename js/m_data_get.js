@@ -1,7 +1,7 @@
 var m_data_get = (function () {
     "use strict";
     // Application object.
-const baseUrl = "https://dev.wappprojects.de/wiws22i/"
+    const baseUrl = "https://dev.wappprojects.de/wiws22i/"
 
     const m_data_get = {
         getEmployees: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employees", `${baseUrl}employees`); },
