@@ -199,10 +199,8 @@ document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) =>
                 <input type="text" class="form-control" id="add-addresspostalCode" name="postalCode">
             </div>
             <div class="mb-3">
-                <div class="form-check">
                     <input type="checkbox" class="form-check-input" id="add-isHeadOffice" name="isHeadOffice">
                     <label for="add-isHeadOffice" class="form-check-label">Handelt es sich um einen Hauptstandort?</label>
-                </div>
             </div>
         </form> 
         `
@@ -305,30 +303,34 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
         else if (m_data_render.currentTable === "addresses") {
             console.log('addresses')
             document.querySelector("#modal-body-edit").innerHTML = `
-                    
+                    <p><strong>Stadt:</strong> <span id="modal-city></span></p>
                     <p><strong>Straße und Hausnummer:</strong> <span id="modal-street></span></p>
                     <p><strong>Postleitzahl:</strong> <span id="modal-postalCode"></span></p>
-                    <p><strong>Postleitzahl:</strong> <span id="modal-city"></span></p>
+                    <p><strong>Hauptstandort:</strong> <span id="modal-isHeadOffice"></span></p>
 
                     <div id="edit-section" class="mt-3" style="display: none;">
                         <h4>Bearbeite die Daten:</h6>
                     </div> 
 
              <form id="edit-form">
-
                         <div class="mb-3">
-                            <label for="edit-addressstreet" class="form-label">Straße & Hausnummer</label>
-                            <input type="text" class="form-control" id="add-addressstreet" name="street">
+                            <label for="edit-adressescity" class="form-label">Stadt</label>
+                            <input type="text" class="form-control" id="add-adressescity" name="city">
                         </div>
                         <div class="mb-3">
-                            <label for="edit-addresscity" class="form-label">Nachname</label>
-                            <input type="text" class="form-control" id="add-addresscity" name="city">
+                            <label for="edit-adressesstreet" class="form-label">Straße & Hausnummer</label>
+                            <input type="text" class="form-control" id="add-adressesstreet" name="street">
                         </div>
+                        
                         <div class="mb-3">
                             <label for="edit-addresspostalCode" class="form-label">Postleitzahl</label>
                             <input type="text" class="form-control" id="add-addresspostalCode" name="postalCode">
                         </div>
-                    </form>
+                        <div class="mb-3">
+                            <input type="checkbox" class="form-check-input" id="edit-isHeadOffice" name="isHeadOffice">
+                            <label for="add-isHeadOffice" class="form-check-label">Handelt es sich um einen Hauptstandort?</label>
+                        </div>
+                </form>
         
         `
             openDetailPopup(cId)
@@ -363,7 +365,7 @@ async function openDetailPopup(cId) {
                 editButton.onclick = () => {
 
                     var renderFunc = m_data_render.renderEmployeesByIdFill
-                    m_data_crud.getEmployeeById(renderFunc, cId);
+                    m_data_crud.getAddressById(renderFunc, cId);
 
                     document.getElementById('edit-button').style.display = 'none';
                     document.getElementById('save-button').style.display = 'inline-block';
@@ -372,6 +374,18 @@ async function openDetailPopup(cId) {
 
                 break;
 
+            case "addresses":
+                editButton.onclick = () => {
+                    console.log("Ich brauch Daten der Adresse",cId)
+                    var renderFunc = m_data_render.renderAdressesByIdFill.Fill
+                    m_data_crud.getAddressById(renderFunc, cId);
+
+                    document.getElementById('edit-button').style.display = 'none';
+                    document.getElementById('save-button').style.display = 'inline-block';
+                    document.getElementById('edit-form').style.display = 'block';
+                };
+
+                break
             default:
                 break;
         }

@@ -187,13 +187,16 @@ m_data_render.renderAdressesById = function () {
     var adresses
 
     if (!m_data_crud.finishedWithError) {
-        var employee = m_data_crud.dataStore.adressesById;
+        var adresses = m_data_crud.dataStore.adressesById;
+        console.log("Ich bin in der Render AdresseByID")
+        console.log(m_data_crud.dataStore.adressesById)
 
-        const fullName = `${adresses.firstName} ${adresses.lastName}`; 
-        $("#detailModalLabel").text(fullName);
-        $("#modal-email").text(employee.eMail);
-        $("#modal-phone").text(employee.phoneNumber);
-        $("#modal-position").text(employee.position);
+      
+        $("#detailModalLabel").text("Adresse");
+        $("#modal-city").text(adresses.city);
+        $("#modal-street").text(adresses.street);
+        $("#modal-postalCode").text(adresses.postalCode);
+        $("#modal-isHeadOffice").text(adresses.isHeadOffice);
 
     } else {
         var alertHeading = "Error " + m_data_crud.error.code;
@@ -207,14 +210,13 @@ m_data_render.renderAdressesByIdFill = function () {
     var adresses
 
     if (!m_data_crud.finishedWithError) {
-        var employee = m_data_crud.dataStore.adressesById;
+        var adresses = m_data_crud.dataStore.adressesById;
         
-        
-        $("#edit-employeesfirstName").val(employee.firstName);
-        $("#edit-employeeslastName").val(employee.lastName);
-        $("#edit-employeesMail").val(employee.eMail);
-        $("#edit-employeesphoneNumber").val(employee.phoneNumber);
-        $("#edit-employeesposition").val(employee.position);       
+      
+        $("#edit-adressescity").text(adresses.city);
+        $("#edit-adressesstreet").text(adresses.street);
+        $("#edit-addresspostalCode").text(adresses.postalCode);
+        $("#edit-isHeadOffice").text(adresses.isHeadOffice);
     
     } else {
         var alertHeading = "Error " + m_data_crud.error.code;
@@ -263,7 +265,7 @@ m_data_render.renderAdressesByIdFill = function () {
         }
     };
 
-    
+// render Addresses -----------------------------------------------------------------------------------------------------------
     m_data_render.renderAddresses = function () {
         var addresses, rows = "";
         if (!m_data_crud.finishedWithError) {
