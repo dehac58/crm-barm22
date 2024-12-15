@@ -11,6 +11,7 @@ var m_data_crud = (function () {
         getCustomerById: (do_next_func, customerId) => { exchangeDataWithAjax(do_next_func, "customerById", `${baseUrl}customers/${customerId}`, 'GET'); },
         getEmployeesByCustomerId: (do_next_func, customerId) => { exchangeDataWithAjax(do_next_func, "employeesByCustomerId", `${baseUrl}customers/${customerId}/employees`, 'GET'); },
         getEmployeeByIdByCustomerId: (do_next_func, customerId, employeeId) => { exchangeDataWithAjax(do_next_func, "employeeByIdByCustomerId", `${baseUrl}customers/${customerId}/employees/${employeeId}`, 'GET'); },
+        getAddressById: (do_next_func, addressId) => { exchangeDataWithAjax(do_next_func, "addressById", `${baseUrl}addresses/${addressId}`, 'GET'); },
         getAddressesByCustomerId: (do_next_func, customerId) => { exchangeDataWithAjax(do_next_func, "addressesByCustomerId", `${baseUrl}customers/${customerId}/addresses`, 'GET'); },
 
         postEmployee: (do_next_func, data) => { exchangeDataWithAjax(do_next_func, "postEmployee", `${baseUrl}employees`, 'POST', data); },
