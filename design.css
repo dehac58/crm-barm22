@@ -12,8 +12,32 @@
     align-items: center;
     font-size: 4vw;
 }
+/* Stil für den responsiven Bereich */
+.table-responsive {
+    overflow-x: auto; /* Ermöglicht das horizontale Scrollen der Tabelle */
+}
 
-#button-back{
-    height: 100px;
-    width: 100px;
+/* Modalfenster für kleinere Bildschirme anpassen */
+@media (max-width: 768px) {
+    .modal-dialog {
+        max-width: 90%; /* Modal Dialog nimmt auf mobilen Geräten mehr Platz ein */
+    }
+
+    .buttonaddnewcustomer {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 1050;
+    }
+}
+
+/* Für sehr kleine Geräte */
+@media (max-width: 480px) {
+    .table-responsive {
+        font-size: 12px; /* Verkleinert die Schriftgröße der Tabelle */
+    }
+
+    .modal-dialog {
+        max-width: 100%; /* Modalfenster nimmt den gesamten Bildschirm ein */
+    }
 }

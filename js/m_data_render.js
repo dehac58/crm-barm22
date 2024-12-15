@@ -165,7 +165,7 @@ m_data_render.renderEmployeesByIdFill = function () {
     if (!m_data_crud.finishedWithError) {
         var employee = m_data_crud.dataStore.employeeById;
         
-        // $("#id").val(employee.id);
+        
         $("#edit-employeesfirstName").val(employee.firstName);
         $("#edit-employeeslastName").val(employee.lastName);
         $("#edit-employeesMail").val(employee.eMail);
@@ -180,6 +180,49 @@ m_data_render.renderEmployeesByIdFill = function () {
     }
 };
 
+// render edit-Popup Adresses -------------------------------------------------------------------------------------------------
+
+m_data_render.renderAdressesById = function () {
+
+    var adresses
+
+    if (!m_data_crud.finishedWithError) {
+        var employee = m_data_crud.dataStore.adressesById;
+
+        const fullName = `${adresses.firstName} ${adresses.lastName}`; 
+        $("#detailModalLabel").text(fullName);
+        $("#modal-email").text(employee.eMail);
+        $("#modal-phone").text(employee.phoneNumber);
+        $("#modal-position").text(employee.position);
+
+    } else {
+        var alertHeading = "Error " + m_data_crud.error.code;
+        var alertText = m_data_crud.error.message;
+
+        alert(alertHeading + ": " + alertText);
+    }
+};
+m_data_render.renderAdressesByIdFill = function () {
+
+    var adresses
+
+    if (!m_data_crud.finishedWithError) {
+        var employee = m_data_crud.dataStore.adressesById;
+        
+        
+        $("#edit-employeesfirstName").val(employee.firstName);
+        $("#edit-employeeslastName").val(employee.lastName);
+        $("#edit-employeesMail").val(employee.eMail);
+        $("#edit-employeesphoneNumber").val(employee.phoneNumber);
+        $("#edit-employeesposition").val(employee.position);       
+    
+    } else {
+        var alertHeading = "Error " + m_data_crud.error.code;
+        var alertText = m_data_crud.error.message;
+
+        alert(alertHeading + ": " + alertText);
+    }
+};
 
 // render Employees -----------------------------------------------------------------------------------------------------------
     m_data_render.renderEmployees = function () {
@@ -240,7 +283,7 @@ m_data_render.renderEmployeesByIdFill = function () {
             addresses.forEach(addr => {
                 rows += `
                     <tr>
-                        <td>${addr.id}</td>
+                        <td><a href="#" class="id-link" data-id="${addr.id}">${addr.id}</a></td>
                         <td>${addr.street}</td>
                         <td>${addr.postalCode}</td>
                         <td>${addr.city}</td>

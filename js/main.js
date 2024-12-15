@@ -122,9 +122,9 @@ $(document).ready(function () {
         }
 
         console.log("löschen erfolgreich");
-    }); 
-    
-    
+    });
+
+
     $("#button-back").click(function () {
         console.log("Button gedrückt")
         var renderFunc = m_data_render.renderCustomers;
@@ -303,9 +303,16 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
             console.log("Edit-Form wurde aufgerufen");
         }
         else if (m_data_render.currentTable === "addresses") {
-            console.log('employees')
-            document.querySelector("#modal-body").innerHTML = `
+            console.log('addresses')
+            document.querySelector("#modal-body-edit").innerHTML = `
+                    
+                    <p><strong>Straße und Hausnummer:</strong> <span id="modal-street></span></p>
+                    <p><strong>Postleitzahl:</strong> <span id="modal-postalCode"></span></p>
+                    <p><strong>Postleitzahl:</strong> <span id="modal-city"></span></p>
 
+                    <div id="edit-section" class="mt-3" style="display: none;">
+                        <h4>Bearbeite die Daten:</h6>
+                    </div> 
 
              <form id="edit-form">
 
@@ -324,6 +331,7 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                     </form>
         
         `
+            openDetailPopup(cId)
         }
     }
 });
