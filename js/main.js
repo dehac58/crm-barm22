@@ -15,17 +15,25 @@ $(document).ready(function () {
             return;
         }
 
-        console.log("Hinzufügen")
-        console.log(m_data_render.currentTable)
-
-        // Werte erfassen
         const formData = new FormData(form);
-
-        // Konvertiere FormData in JSON
+        let isValid = true;
         const data = {};
+
         formData.forEach((value, key) => {
-            data[key] = value;
+            data[key] = value; 
+            if (value === '') { 
+                isValid = false;
+                const inputField = form.querySelector([name="${key}"]);
+                if (inputField) {
+                    inputField.classList.add('is-invalid'); 
+                }
+            }
         });
+
+        if (!isValid) {
+            alert('Bitte füllen Sie alle Felder aus.');
+            return;
+        }
         switch (m_data_render.currentTable) {
             case "customers":
                 m_data_crud.postCustomer(() => {
@@ -39,11 +47,12 @@ $(document).ready(function () {
                 }, data);
                 break;
             case "addresses":
-                console.log("Hilf mir")
-                console.log("adresses in hin", m_data_render.customerId)
                 m_data_crud.postAddress(() => {
                     m_data_crud.getAddressesByCustomerId(m_data_render.renderAddresses, m_data_render.customerId);
-                }, m_data_render.customerId, data);
+                }, m_data_render.customerId, {
+                    ...data,
+                    isHeadOffice: data.isHeadOffice ? 1 : 0
+                });
                 break;
             default:
                 break;
@@ -76,15 +85,19 @@ $(document).ready(function () {
                 m_data_crud.putCustomerById(() => {
                     m_data_crud.getCustomers(m_data_render.renderCustomers);
                 }, m_data_crud.dataStore.customerById.id, data);
-
                 break;
             case "employees":
-
                 m_data_crud.putEmployeeById(() => {
                     m_data_crud.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
                 }, m_data_crud.dataStore.employeeById.id, data);
-
-
+                break;
+            case "addresses":
+                m_data_crud.putAddressById(() => {
+                    m_data_crud.getAddressesByCustomerId(m_data_render.renderAddresses, m_data_render.customerId);
+                }, m_data_render.customerId, m_data_crud.dataStore.addressById.id, {
+                    ...data,
+                    isHeadOffice: $("#edit-isHeadOffice").is(':checked') ? 1 : 0
+                });
                 break;
 
             default:
@@ -113,10 +126,12 @@ $(document).ready(function () {
                 m_data_crud.deleteEmployeeById(() => {
                     m_data_crud.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
                 }, m_data_crud.dataStore.employeeById.id);
-
-
                 break;
-
+                case "addresses":
+                m_data_crud.deleteAddressById(() => {
+                    m_data_crud.getAddressesByCustomerId(m_data_render.renderAddresses, m_data_render.customerId);
+                }, m_data_render.customerId, m_data_crud.dataStore.addressById.id);
+                break;
             default:
                 break;
         }
@@ -183,7 +198,7 @@ document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) =>
         `
     }
     else if (m_data_render.currentTable === "addresses") {
-        console.log('adresses')
+        console.log('addresses')
         document.querySelector("#modal-body").innerHTML = `
         <form id="add-form">
             <div class="mb-3">
@@ -199,8 +214,9 @@ document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) =>
                 <input type="text" class="form-control" id="add-addresspostalCode" name="postalCode">
             </div>
             <div class="mb-3">
-                    <input type="checkbox" class="form-check-input" id="add-isHeadOffice" name="isHeadOffice">
-                    <label for="add-isHeadOffice" class="form-check-label">Handelt es sich um einen Hauptstandort?</label>
+                <input type="hidden" name="isHeadOffice" value="false">
+                <input type="checkbox" class="form-check-input" id="add-isHeadOffice" name="isHeadOffice" value="true">
+                <label for="add-isHeadOffice" class="form-check-label">Hauptstandort</label>
             </div>
         </form> 
         `
@@ -213,16 +229,13 @@ document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) =>
 // Bearbeiten von Werten-------------------------------------------------------------------------------------------------------
 document.querySelector('#table-body').addEventListener('click', (e) => {
     if (e.target && e.target.classList.contains('id-link')) {
-        const cId = e.target.dataset.id;
-        console.log(`ID geklickt: ${cId}`);
+        const id = e.target.dataset.id;
+        console.log(`ID geklickt: ${id}`);
 
         if (m_data_render.currentTable === "customers") {
-
-            customer = m_data_crud.dataStore.customerById;
             e.preventDefault();
-
             var renderFunc = m_data_render.renderCustomerById
-            m_data_crud.getCustomerById(renderFunc, cId);
+            m_data_crud.getCustomerById(renderFunc, id);
 
 
             document.querySelector("#modal-body-edit").innerHTML = `
@@ -249,17 +262,16 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                             </form>
         `;
 
-            openDetailPopup(cId)
+            openDetailPopup(id)
             console.log("Edit-Form wurde aufgerufen");
         } else if (m_data_render.currentTable === "employees") {
             console.log('employees')
-            console.log(`ID geklickt: ${cId}`);
+            console.log(`ID geklickt: ${id}`);
 
-            employees = m_data_crud.dataStore.employeeById;
             e.preventDefault();
 
             var renderFunc = m_data_render.renderEmployeesById
-            m_data_crud.getEmployeeById(renderFunc, cId);
+            m_data_crud.getEmployeeById(renderFunc, id);
             console.log("m_data_render")
 
             document.querySelector("#modal-body-edit").innerHTML = `
@@ -296,15 +308,16 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                             </form>
         `;
 
-            console.log(`ID Mitarbeiter geklickt: ${cId}`)
-            openDetailPopup(cId)
-            console.log("Edit-Form wurde aufgerufen");
+            openDetailPopup(id)
         }
         else if (m_data_render.currentTable === "addresses") {
-            console.log('addresses')
+            e.preventDefault();
+            var renderFunc = m_data_render.renderAddressesById
+            m_data_crud.getAddressById(renderFunc, id);
+
             document.querySelector("#modal-body-edit").innerHTML = `
-                    <p><strong>Stadt:</strong> <span id="modal-city></span></p>
-                    <p><strong>Straße und Hausnummer:</strong> <span id="modal-street></span></p>
+                    <p><strong>Stadt:</strong> <span id="modal-city"></span></p>
+                    <p><strong>Straße und Hausnummer:</strong> <span id="modal-street"></span></p>
                     <p><strong>Postleitzahl:</strong> <span id="modal-postalCode"></span></p>
                     <p><strong>Hauptstandort:</strong> <span id="modal-isHeadOffice"></span></p>
 
@@ -314,31 +327,32 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
 
              <form id="edit-form">
                         <div class="mb-3">
-                            <label for="edit-adressescity" class="form-label">Stadt</label>
-                            <input type="text" class="form-control" id="add-adressescity" name="city">
+                            <label for="edit-addressescity" class="form-label">Stadt</label>
+                            <input type="text" class="form-control" id="edit-addressescity" name="city">
                         </div>
                         <div class="mb-3">
-                            <label for="edit-adressesstreet" class="form-label">Straße & Hausnummer</label>
-                            <input type="text" class="form-control" id="add-adressesstreet" name="street">
+                            <label for="edit-addressesstreet" class="form-label">Straße & Hausnummer</label>
+                            <input type="text" class="form-control" id="edit-addressesstreet" name="street">
                         </div>
                         
                         <div class="mb-3">
                             <label for="edit-addresspostalCode" class="form-label">Postleitzahl</label>
-                            <input type="text" class="form-control" id="add-addresspostalCode" name="postalCode">
+                            <input type="text" class="form-control" id="edit-addresspostalCode" name="postalCode">
                         </div>
                         <div class="mb-3">
-                            <input type="checkbox" class="form-check-input" id="edit-isHeadOffice" name="isHeadOffice">
-                            <label for="add-isHeadOffice" class="form-check-label">Handelt es sich um einen Hauptstandort?</label>
+                            <input type="hidden" name="isHeadOffice" value="false" id="edit-hiddenInput">
+                            <input type="checkbox" class="form-check-input" id="edit-isHeadOffice" name="isHeadOffice" value="true">
+                            <label for="add-isHeadOffice" class="form-check-label">Hauptstandort</label>
                         </div>
                 </form>
         
         `
-            openDetailPopup(cId)
+            openDetailPopup(id)
         }
     }
 });
 
-async function openDetailPopup(cId) {
+async function openDetailPopup(id) {
     try {
         console.log("openDetailPopup")
         // Zeige den Bearbeiten-Button und setze die Werte in das Formular
@@ -353,7 +367,7 @@ async function openDetailPopup(cId) {
                 editButton.onclick = () => {
 
                     var renderFunc = m_data_render.renderCustomerByIdFill
-                    m_data_crud.getCustomerById(renderFunc, cId);
+                    m_data_crud.getCustomerById(renderFunc, id);
 
                     document.getElementById('edit-button').style.display = 'none';
                     document.getElementById('save-button').style.display = 'inline-block';
@@ -365,7 +379,7 @@ async function openDetailPopup(cId) {
                 editButton.onclick = () => {
 
                     var renderFunc = m_data_render.renderEmployeesByIdFill
-                    m_data_crud.getAddressById(renderFunc, cId);
+                    m_data_crud.getEmployeeById(renderFunc, id);
 
                     document.getElementById('edit-button').style.display = 'none';
                     document.getElementById('save-button').style.display = 'inline-block';
@@ -376,9 +390,9 @@ async function openDetailPopup(cId) {
 
             case "addresses":
                 editButton.onclick = () => {
-                    console.log("Ich brauch Daten der Adresse",cId)
-                    var renderFunc = m_data_render.renderAdressesByIdFill.Fill
-                    m_data_crud.getAddressById(renderFunc, cId);
+                    console.log("Ich brauch Daten der Adresse", id)
+                    var renderFunc = m_data_render.renderAddressesByIdFill
+                    m_data_crud.getAddressById(renderFunc, id);
 
                     document.getElementById('edit-button').style.display = 'none';
                     document.getElementById('save-button').style.display = 'inline-block';

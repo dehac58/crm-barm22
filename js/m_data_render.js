@@ -66,7 +66,7 @@ var m_data_render = (function () {
                 `;
             }); 
 
-            $("#table-title").html('Kundentabelle PoPokaka')
+            $("#table-title").html('Kundentabelle')
             $("#table-head").html(tableHead); 
             $("#table-body").html(rows);
             $("#button-back").css({"display" : "none"});
@@ -182,21 +182,17 @@ m_data_render.renderEmployeesByIdFill = function () {
 
 // render edit-Popup Adresses -------------------------------------------------------------------------------------------------
 
-m_data_render.renderAdressesById = function () {
-
-    var adresses
+m_data_render.renderAddressesById = function () {
+    var address;
 
     if (!m_data_crud.finishedWithError) {
-        var adresses = m_data_crud.dataStore.adressesById;
-        console.log("Ich bin in der Render AdresseByID")
-        console.log(m_data_crud.dataStore.adressesById)
-
-      
+        var address = m_data_crud.dataStore.addressById;
+        console.log(address.city)
         $("#detailModalLabel").text("Adresse");
-        $("#modal-city").text(adresses.city);
-        $("#modal-street").text(adresses.street);
-        $("#modal-postalCode").text(adresses.postalCode);
-        $("#modal-isHeadOffice").text(adresses.isHeadOffice);
+        $("#modal-city").text(address.city);
+        $("#modal-street").text(address.street);
+        $("#modal-postalCode").text(address.postalCode);
+        $("#modal-isHeadOffice").text(address.isHeadOffice);
 
     } else {
         var alertHeading = "Error " + m_data_crud.error.code;
@@ -205,18 +201,21 @@ m_data_render.renderAdressesById = function () {
         alert(alertHeading + ": " + alertText);
     }
 };
-m_data_render.renderAdressesByIdFill = function () {
-
-    var adresses
-
+m_data_render.renderAddressesByIdFill = function () {
     if (!m_data_crud.finishedWithError) {
-        var adresses = m_data_crud.dataStore.adressesById;
-        
-      
-        $("#edit-adressescity").text(adresses.city);
-        $("#edit-adressesstreet").text(adresses.street);
-        $("#edit-addresspostalCode").text(adresses.postalCode);
-        $("#edit-isHeadOffice").text(adresses.isHeadOffice);
+        var address = m_data_crud.dataStore.addressById;
+
+        // Felder ausfüllen
+        $("#edit-addressescity").val(address.city);
+        $("#edit-addressesstreet").val(address.street);
+        $("#edit-addresspostalCode").val(address.postalCode);
+
+        // Checkbox-Status setzen
+        var isHeadOffice = address.isHeadOffice == 1; // true, wenn 1; false, wenn 0
+        $("#edit-isHeadOffice").prop('checked', isHeadOffice);
+
+        // Wert synchronisieren
+        $("#edit-isHeadOffice").val(isHeadOffice ? 'true' : 'false');
     
     } else {
         var alertHeading = "Error " + m_data_crud.error.code;
@@ -225,6 +224,7 @@ m_data_render.renderAdressesByIdFill = function () {
         alert(alertHeading + ": " + alertText);
     }
 };
+
 
 // render Employees -----------------------------------------------------------------------------------------------------------
     m_data_render.renderEmployees = function () {
@@ -278,18 +278,16 @@ m_data_render.renderAdressesByIdFill = function () {
                     <th>Straße</th>
                     <th>Postleitzahl</th>
                     <th>Stadt</th>
-                    <th>Hauptstandort</th>
                 </tr>
             `;
             
             addresses.forEach(addr => {
                 rows += `
-                    <tr>
+                    <tr style="background-color: ${addr.isHeadOffice == 1 && '#E3EAF2'}">
                         <td><a href="#" class="id-link" data-id="${addr.id}">${addr.id}</a></td>
                         <td>${addr.street}</td>
                         <td>${addr.postalCode}</td>
                         <td>${addr.city}</td>
-                        <td>${addr.isHeadOffice}</td>
                     </tr> 
                 `;
                 
