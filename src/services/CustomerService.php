@@ -150,7 +150,7 @@ class CustomerService
 
     public function getAddresses($customerId)
     {
-        $sql = "SELECT a.street, a.city, a.postalCode, a.id
+        $sql = "SELECT a.street, a.city, a.postalCode, a.id, ca.isHeadOffice
             FROM Customers_Addresses AS ca 
             LEFT JOIN Addresses AS a ON ca.A_ID = a.id
             WHERE ca.C_ID = :customerId";
