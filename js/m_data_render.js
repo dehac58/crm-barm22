@@ -70,6 +70,7 @@ var m_data_render = (function () {
             $("#table-title").html('Kundentabelle PoPokaka')
             $("#table-head").html(tableHead); 
             $("#table-body").html(rows);
+            $("#button-back").css({"display" : "none"});
 
 //Add click event to employee button ---------
             document.querySelectorAll('.buttonemployee').forEach(button => {
@@ -212,6 +213,7 @@ m_data_render.renderEmployeesByIdFill = function () {
             $("#table-title").html('Mitarbeitertabelle')
             $("#table-head").html(tableHead); 
             $("#table-body").html(rows);
+            $("#button-back").css({"display" : "block"});
         } else {
             var alertHeading = "Error " + m_data_get.error.code;
             var alertText = m_data_get.error.message;
@@ -220,7 +222,7 @@ m_data_render.renderEmployeesByIdFill = function () {
     };
 
     
-    m_data_render.renderAddresses = function (addresses) {
+    m_data_render.renderAddresses = function () {
         var addresses, rows;
 
         if (!m_data_get.finishedWithError) {
@@ -253,6 +255,7 @@ m_data_render.renderEmployeesByIdFill = function () {
             $("#table-title").html('Adressentabelle')
             $("#table-head").html(tableHead); 
             $("#table-body").html(rows);
+            $("#button-back").css({"display" : "block"});
         } else {
             var alertHeading = "Error " + m_data_get.error.code;
             var alertText = m_data_get.error.message;

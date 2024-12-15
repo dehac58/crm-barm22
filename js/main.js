@@ -371,14 +371,3 @@ async function openDetailPopup(cId) {
         console.error('Fehler beim Laden der Benutzerdetails:', error);
     }
 }
-
-$("#button-back").click(function(){
-
-    console.log("#button-backclicked.");
-
-    var renderFunc = m_data_render.renderCustomers;
-
-    m_data_get.getCustomers(renderFunc);
-
-
-  });
