@@ -207,7 +207,6 @@ document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) =>
 
 
 // Bearbeiten von Werten-------------------------------------------------------------------------------------------------------
-
 document.querySelector('#table-body').addEventListener('click', (e) => {
     if (e.target && e.target.classList.contains('id-link')) {
         const cId = e.target.dataset.id;

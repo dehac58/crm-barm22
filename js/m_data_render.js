@@ -64,7 +64,6 @@ var m_data_render = (function () {
                         </td>
                     </tr> 
                 `;
-                
             }); 
 
             $("#table-title").html('Kundentabelle PoPokaka')
@@ -223,11 +222,9 @@ m_data_render.renderEmployeesByIdFill = function () {
 
     
     m_data_render.renderAddresses = function () {
-        var addresses, rows;
-
+        var addresses, rows = "";
         if (!m_data_get.finishedWithError) {
             m_data_render.currentTable = "addresses";
-             // get saved data
             addresses = m_data_get.dataStore.addressesByCustomerId;
 
             const tableHead = `
@@ -240,14 +237,14 @@ m_data_render.renderEmployeesByIdFill = function () {
                 </tr>
             `;
             
-            addresses.forEach(obj => {
+            addresses.forEach(addr => {
                 rows += `
                     <tr>
-                        <td>${obj.id}</td>
-                        <td>${obj.street}</td>
-                        <td>${obj.postalCode}</td>
-                        <td>${obj.city}</td>
-                        <td>${obj.isHeadOffice}</td>
+                        <td>${addr.id}</td>
+                        <td>${addr.street}</td>
+                        <td>${addr.postalCode}</td>
+                        <td>${addr.city}</td>
+                        <td>${addr.isHeadOffice}</td>
                     </tr> 
                 `;
                 
