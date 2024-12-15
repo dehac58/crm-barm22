@@ -28,10 +28,10 @@ var m_data_render = (function () {
         
         var customers, rows = "";
 
-        if (!m_data_get.finishedWithError) {
+        if (!m_data_crud.finishedWithError) {
             m_data_render.currentTable = "customers";
             // get saved data
-            customers = m_data_get.dataStore.customers;
+            customers = m_data_crud.dataStore.customers;
             
 
             const tableHead = `
@@ -77,7 +77,7 @@ var m_data_render = (function () {
                     e.preventDefault();
                     m_data_render.customerId = e.target.dataset.id;
                     
-                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
+                    m_data_crud.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
                 });
             });
 
@@ -87,12 +87,12 @@ var m_data_render = (function () {
                     e.preventDefault();
                     m_data_render.customerId = e.target.dataset.id;
                     
-                    m_data_get.getAddressesByCustomerId(m_data_render.renderAddresses, m_data_render.customerId);
+                    m_data_crud.getAddressesByCustomerId(m_data_render.renderAddresses, m_data_render.customerId);
                 });
             });
         } else {
-            var alertHeading = "Error " + m_data_get.error.code;
-            var alertText = m_data_get.error.message;
+            var alertHeading = "Error " + m_data_crud.error.code;
+            var alertText = m_data_crud.error.message;
 
             alert(alertHeading + ": " + alertText);
         }
@@ -103,16 +103,16 @@ var m_data_render = (function () {
 
         var customer
         
-        if (!m_data_get.finishedWithError) {
-            customer = m_data_get.dataStore.customerById;
+        if (!m_data_crud.finishedWithError) {
+            customer = m_data_crud.dataStore.customerById;
 
             $("#detailModalLabel").text(customer.companyName);
             $("#modal-email").text(customer.contactEmail);
             $("#modal-phone").text(customer.contactPhone);
         
         } else {
-            var alertHeading = "Error " + m_data_get.error.code;
-            var alertText = m_data_get.error.message;
+            var alertHeading = "Error " + m_data_crud.error.code;
+            var alertText = m_data_crud.error.message;
 
             alert(alertHeading + ": " + alertText);
         }
@@ -121,16 +121,16 @@ var m_data_render = (function () {
 
         var customer
 
-        if (!m_data_get.finishedWithError) {
-            customer = m_data_get.dataStore.customerById;
+        if (!m_data_crud.finishedWithError) {
+            customer = m_data_crud.dataStore.customerById;
 
             $("#edit-companyname").val(customer.companyName);
             $("#edit-email").val(customer.contactEmail);
             $("#edit-phone").val(customer.contactPhone);            
         
         } else {
-            var alertHeading = "Error " + m_data_get.error.code;
-            var alertText = m_data_get.error.message;
+            var alertHeading = "Error " + m_data_crud.error.code;
+            var alertText = m_data_crud.error.message;
 
             alert(alertHeading + ": " + alertText);
         }
@@ -142,8 +142,8 @@ m_data_render.renderEmployeesById = function () {
 
     var employee
 
-    if (!m_data_get.finishedWithError) {
-        var employee = m_data_get.dataStore.employeeById;
+    if (!m_data_crud.finishedWithError) {
+        var employee = m_data_crud.dataStore.employeeById;
 
         const fullName = `${employee.firstName} ${employee.lastName}`; 
         $("#detailModalLabel").text(fullName);
@@ -152,8 +152,8 @@ m_data_render.renderEmployeesById = function () {
         $("#modal-position").text(employee.position);
 
     } else {
-        var alertHeading = "Error " + m_data_get.error.code;
-        var alertText = m_data_get.error.message;
+        var alertHeading = "Error " + m_data_crud.error.code;
+        var alertText = m_data_crud.error.message;
 
         alert(alertHeading + ": " + alertText);
     }
@@ -162,8 +162,8 @@ m_data_render.renderEmployeesByIdFill = function () {
 
     var employee
 
-    if (!m_data_get.finishedWithError) {
-        var employee = m_data_get.dataStore.employeeById;
+    if (!m_data_crud.finishedWithError) {
+        var employee = m_data_crud.dataStore.employeeById;
         
         // $("#id").val(employee.id);
         $("#edit-employeesfirstName").val(employee.firstName);
@@ -173,8 +173,8 @@ m_data_render.renderEmployeesByIdFill = function () {
         $("#edit-employeesposition").val(employee.position);       
     
     } else {
-        var alertHeading = "Error " + m_data_get.error.code;
-        var alertText = m_data_get.error.message;
+        var alertHeading = "Error " + m_data_crud.error.code;
+        var alertText = m_data_crud.error.message;
 
         alert(alertHeading + ": " + alertText);
     }
@@ -184,9 +184,9 @@ m_data_render.renderEmployeesByIdFill = function () {
 // render Employees -----------------------------------------------------------------------------------------------------------
     m_data_render.renderEmployees = function () {
         var employees, rows = "";
-        if (!m_data_get.finishedWithError) {
+        if (!m_data_crud.finishedWithError) {
             m_data_render.currentTable = "employees";
-            employees = m_data_get.dataStore.employeesByCustomerId;
+            employees = m_data_crud.dataStore.employeesByCustomerId;
             const tableHead = `
                 <tr>
                     <th>ID</th>
@@ -214,8 +214,8 @@ m_data_render.renderEmployeesByIdFill = function () {
             $("#table-body").html(rows);
             $("#button-back").css({"display" : "block"});
         } else {
-            var alertHeading = "Error " + m_data_get.error.code;
-            var alertText = m_data_get.error.message;
+            var alertHeading = "Error " + m_data_crud.error.code;
+            var alertText = m_data_crud.error.message;
             alert(alertHeading + ": " + alertText);
         }
     };
@@ -223,9 +223,9 @@ m_data_render.renderEmployeesByIdFill = function () {
     
     m_data_render.renderAddresses = function () {
         var addresses, rows = "";
-        if (!m_data_get.finishedWithError) {
+        if (!m_data_crud.finishedWithError) {
             m_data_render.currentTable = "addresses";
-            addresses = m_data_get.dataStore.addressesByCustomerId;
+            addresses = m_data_crud.dataStore.addressesByCustomerId;
 
             const tableHead = `
                 <tr>
@@ -254,8 +254,8 @@ m_data_render.renderEmployeesByIdFill = function () {
             $("#table-body").html(rows);
             $("#button-back").css({"display" : "block"});
         } else {
-            var alertHeading = "Error " + m_data_get.error.code;
-            var alertText = m_data_get.error.message;
+            var alertHeading = "Error " + m_data_crud.error.code;
+            var alertText = m_data_crud.error.message;
 
             alert(alertHeading + ": " + alertText);
         }

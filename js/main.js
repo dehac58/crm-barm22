@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     var renderFunc = m_data_render.renderCustomers;
 
-    m_data_get.getCustomers(renderFunc);
+    m_data_crud.getCustomers(renderFunc);
 
     // EventListener für hinzugefügen von Werten ----------------------------------------------------------------------------------
     document.querySelector("#submitBtn").addEventListener('click', (e) => {
@@ -28,21 +28,21 @@ $(document).ready(function () {
         });
         switch (m_data_render.currentTable) {
             case "customers":
-                m_data_post.postCustomer(() => {
-                    m_data_get.getCustomers(m_data_render.renderCustomers);
+                m_data_crud.postCustomer(() => {
+                    m_data_crud.getCustomers(m_data_render.renderCustomers);
                 }, data);
                 break;
             case "employees":
                 data['customerID'] = m_data_render.customerId;
-                m_data_post.postEmployee(() => {
-                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
+                m_data_crud.postEmployee(() => {
+                    m_data_crud.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
                 }, data);
                 break;
             case "addresses":
                 console.log("Hilf mir")
                 console.log("adresses in hin", m_data_render.customerId)
-                m_data_post.postAddress(() => {
-                    m_data_get.getAddressesByCustomerId(m_data_render.renderAddresses, m_data_render.customerId);
+                m_data_crud.postAddress(() => {
+                    m_data_crud.getAddressesByCustomerId(m_data_render.renderAddresses, m_data_render.customerId);
                 }, m_data_render.customerId, data);
                 break;
             default:
@@ -73,16 +73,16 @@ $(document).ready(function () {
         switch (m_data_render.currentTable) {
             case "customers":
 
-                m_data_put.putCustomerById(() => {
-                    m_data_get.getCustomers(m_data_render.renderCustomers);
-                }, m_data_get.dataStore.customerById.id, data);
+                m_data_crud.putCustomerById(() => {
+                    m_data_crud.getCustomers(m_data_render.renderCustomers);
+                }, m_data_crud.dataStore.customerById.id, data);
 
                 break;
             case "employees":
 
-                m_data_put.putEmployeeById(() => {
-                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
-                }, m_data_get.dataStore.employeeById.id, data);
+                m_data_crud.putEmployeeById(() => {
+                    m_data_crud.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
+                }, m_data_crud.dataStore.employeeById.id, data);
 
 
                 break;
@@ -105,14 +105,14 @@ $(document).ready(function () {
 
         switch (m_data_render.currentTable) {
             case "customers":
-                m_data_delete.deleteCustomerById(() => {
-                    m_data_get.getCustomers(m_data_render.renderCustomers);
-                }, m_data_get.dataStore.customerById.id);
+                m_data_crud.deleteCustomerById(() => {
+                    m_data_crud.getCustomers(m_data_render.renderCustomers);
+                }, m_data_crud.dataStore.customerById.id);
                 break;
             case "employees":
-                m_data_delete.deleteEmployeeById(() => {
-                    m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
-                }, m_data_get.dataStore.employeeById.id);
+                m_data_crud.deleteEmployeeById(() => {
+                    m_data_crud.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
+                }, m_data_crud.dataStore.employeeById.id);
 
 
                 break;
@@ -128,7 +128,7 @@ $(document).ready(function () {
     $("#button-back").click(function () {
         console.log("Button gedrückt")
         var renderFunc = m_data_render.renderCustomers;
-        m_data_get.getCustomers(renderFunc);
+        m_data_crud.getCustomers(renderFunc);
     })
 });
 
@@ -220,11 +220,11 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
 
         if (m_data_render.currentTable === "customers") {
 
-            customer = m_data_get.dataStore.customerById;
+            customer = m_data_crud.dataStore.customerById;
             e.preventDefault();
 
             var renderFunc = m_data_render.renderCustomerById
-            m_data_get.getCustomerById(renderFunc, cId);
+            m_data_crud.getCustomerById(renderFunc, cId);
 
 
             document.querySelector("#modal-body-edit").innerHTML = `
@@ -257,11 +257,11 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
             console.log('employees')
             console.log(`ID geklickt: ${cId}`);
 
-            employees = m_data_get.dataStore.employeeById;
+            employees = m_data_crud.dataStore.employeeById;
             e.preventDefault();
 
             var renderFunc = m_data_render.renderEmployeesById
-            m_data_get.getEmployeeById(renderFunc, cId);
+            m_data_crud.getEmployeeById(renderFunc, cId);
             console.log("m_data_render")
 
             document.querySelector("#modal-body-edit").innerHTML = `
@@ -343,7 +343,7 @@ async function openDetailPopup(cId) {
                 editButton.onclick = () => {
 
                     var renderFunc = m_data_render.renderCustomerByIdFill
-                    m_data_get.getCustomerById(renderFunc, cId);
+                    m_data_crud.getCustomerById(renderFunc, cId);
 
                     document.getElementById('edit-button').style.display = 'none';
                     document.getElementById('save-button').style.display = 'inline-block';
@@ -355,7 +355,7 @@ async function openDetailPopup(cId) {
                 editButton.onclick = () => {
 
                     var renderFunc = m_data_render.renderEmployeesByIdFill
-                    m_data_get.getEmployeeById(renderFunc, cId);
+                    m_data_crud.getEmployeeById(renderFunc, cId);
 
                     document.getElementById('edit-button').style.display = 'none';
                     document.getElementById('save-button').style.display = 'inline-block';
