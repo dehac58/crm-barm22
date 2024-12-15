@@ -72,7 +72,10 @@ class CustomerService
     // Get Adress by ID
     public function getAdressbyID($id)
     {
-        $sql = "SELECT * FROM Adresses WHERE id = :id";
+        $sql = "SELECT a.*, ca.isHeadOffice
+            FROM Addresses a
+            LEFT JOIN Customers_Addresses ca ON ca.A_ID = a.id
+            WHERE a.id = :id";
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id' => $id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -201,13 +204,12 @@ class CustomerService
         $result = $stmtCheck->fetch();
 
         if ($result['count'] > 1) {
-            $sqlInsert = "INSERT INTO Addresses (street, city, postalCode, isHeadOffice) VALUES (:street, :city, :postalCode, :isHeadOffice)";
+            $sqlInsert = "INSERT INTO Addresses (street, city, postalCode) VALUES (:street, :city, :postalCode)";
             $stmtInsert = $this->pdo->prepare($sqlInsert);
             $successInsert = $stmtInsert->execute([
                 ':street' => $data['street'] ?? null,
                 ':city' => $data['city'] ?? null,
-                ':postalCode' => $data['postalCode'] ?? null,
-                ':isHeadOffice' => $data['isHeadOffice'] ?? null
+                ':postalCode' => $data['postalCode'] ?? null
             ]);
 
             if (!$successInsert) {
@@ -217,13 +219,14 @@ class CustomerService
             $newAddressId = $this->pdo->lastInsertId();
 
             $sqlUpdateCustomer = "UPDATE Customers_Addresses 
-                                    SET A_ID = :newAddressId
+                                    SET A_ID = :newAddressId, isHeadOffice = :isHeadOffice
                                     WHERE C_ID = :customerId AND A_ID = :oldAddressId";
             $stmtUpdateCustomer = $this->pdo->prepare($sqlUpdateCustomer);
             $successUpdate = $stmtUpdateCustomer->execute([
                 ':newAddressId' => $newAddressId,
                 ':customerId' => $customerId,
-                ':oldAddressId' => $addressId
+                ':oldAddressId' => $addressId,
+                ':isHeadOffice' => $data['isHeadOffice'] ?? null
             ]);
             return $successUpdate;
 
@@ -231,8 +234,7 @@ class CustomerService
             $sqlUpdate = "UPDATE Addresses
                 SET street = COALESCE(:street, street),
                     city = COALESCE(:city, city),
-                    postalCode = COALESCE(:postalCode, postalCode),
-                    isHeadOffice = COALESCE(:isHeadOffice, isHeadOffice)
+                    postalCode = COALESCE(:postalCode, postalCode)
                 WHERE id = :id";
 
             $stmtUpdate = $this->pdo->prepare($sqlUpdate);
@@ -240,11 +242,21 @@ class CustomerService
                 ':id' => $addressId,
                 ':street' => $data['street'] ?? null,
                 ':city' => $data['city'] ?? null,
-                ':postalCode' => $data['postalCode'] ?? null,
-                ':isHeadOffice' => $data['isHeadOffice'] ?? null
+                ':postalCode' => $data['postalCode'] ?? null
             ]);
 
-            if ($successUpdate && $stmtUpdate->rowCount() > 0) {
+            $sqlUpdateCustomer = "UPDATE Customers_Addresses 
+                SET isHeadOffice = :isHeadOffice
+                WHERE C_ID = :customerId AND A_ID = :AddressId";
+
+            $stmtUpdateCustomer = $this->pdo->prepare($sqlUpdateCustomer);
+            $successUpdate = $stmtUpdateCustomer->execute([
+            ':customerId' => $customerId,
+            ':AddressId' => $addressId,
+            ':isHeadOffice' => $data['isHeadOffice'] ?? null
+            ]);
+
+            if ($successUpdate) {
                 return true;
             } else {
                 return false;
