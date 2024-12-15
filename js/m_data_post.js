@@ -21,8 +21,13 @@ var m_data_post = (function () {
     // get json data with ajax
 
 	const exchangeDataWithAjax = (do_next_func, url, data) => {
-        console.log("exchangeDataWithAjax", do_next_func)
+
+        console.log('POST Request erhalten')
+
+        m_data_get.finishedWithError = false;
+
         function success_func (result) {
+            console.log('POST war erfolgreich!, Result: ' + result)
            if (result !== null) {
                 m_data_post.data = result;
             } else {

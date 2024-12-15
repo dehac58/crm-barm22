@@ -25,8 +25,10 @@ var m_data_delete = (function () {
 
 	const exchangeDataWithAjax = (do_next_func, url) => {
 
+        console.log('DELETE Request erhalten')
 
         function success_func (result) {
+            console.log('DELETE war erfolgreich!, Result: ' + result)
            if (result !== null) {
                 m_data_delete.data = result;
             } else {

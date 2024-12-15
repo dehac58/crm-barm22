@@ -6,13 +6,13 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
     const m_data_get = {
         getEmployees: (do_next_func) => { exchangeDataWithAjax(do_next_func, "employees", `${baseUrl}employees`); },
         getEmployeeById: (do_next_func, employeeId) => { exchangeDataWithAjax(do_next_func, "employeeById", `${baseUrl}employees/${employeeId}`); },
-        getCustomers: (do_next_func) => {exchangeDataWithAjax(do_next_func, "customers", `${baseUrl}customers`); },
+        getCustomers: (do_next_func) => { exchangeDataWithAjax(do_next_func, "customers", `${baseUrl}customers`); },
         getCustomerById: (do_next_func, customerId) => { exchangeDataWithAjax(do_next_func, "customerById", `${baseUrl}customers/${customerId}`); },
         getEmployeesByCustomerId: (do_next_func, customerId) => { exchangeDataWithAjax(do_next_func, "employeesByCustomerId", `${baseUrl}customers/${customerId}/employees`); },
         getEmployeeByIdByCustomerId: (do_next_func, customerId, employeeId) => { exchangeDataWithAjax(do_next_func, "employeeByIdByCustomerId", `${baseUrl}customers/${customerId}/employees/${employeeId}`); },
         getAddressesByCustomerId: (do_next_func, customerId) => { exchangeDataWithAjax(do_next_func, "addressesByCustomerId", `${baseUrl}customers/${customerId}/addresses`); }
     };
-    
+
     // member variables
 
 	m_data_get.dataStore = {};
@@ -24,16 +24,18 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
     // get json data with ajax
 
 	const exchangeDataWithAjax = (do_next_func, routeKey, url) => {
+
+        console.log('GET Request erhalten, RouteKey: ' + routeKey)
+
         m_data_get.finishedWithError = false;
 
         function success_func (result) {
-           if (result !== null) {
+            console.log('GET war erfolgreich!, Result: ' + result)
+            if (result !== null) {
                 m_data_get.dataStore[routeKey] = result;
             } else {
                 m_data_get.dataStore[routeKey] = {};
             }
-
-            
             do_next_func();
 
         };

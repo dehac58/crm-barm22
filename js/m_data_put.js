@@ -22,9 +22,13 @@ var m_data_put = (function () {
 
 	const exchangeDataWithAjax = (do_next_func, url, data) => {
 
+        console.log('PUT Request erhalten')
+
+        m_data_get.finishedWithError = false;
 
         function success_func (result) {
-           if (result !== null) {
+            console.log('PUT war erfolgreich!, Result: ' + result)
+            if (result !== null) {
                 m_data_put.data = result;
             } else {
                 m_data_put.data = {};
