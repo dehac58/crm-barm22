@@ -27,7 +27,8 @@ var m_data_put = (function () {
         m_data_get.finishedWithError = false;
 
         function success_func (result) {
-            console.log('PUT war erfolgreich!, Result: ' + result)
+            console.log('PUT war erfolgreich!, Result:')
+            console.log(result)
             if (result !== null) {
                 m_data_put.data = result;
             } else {

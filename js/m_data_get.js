@@ -30,7 +30,8 @@ const baseUrl = "https://dev.wappprojects.de/wiws22i/"
         m_data_get.finishedWithError = false;
 
         function success_func (result) {
-            console.log('GET war erfolgreich!, Result: ' + result)
+            console.log('GET war erfolgreich!, Result:')
+            console.log(result)
             if (result !== null) {
                 m_data_get.dataStore[routeKey] = result;
             } else {
