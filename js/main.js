@@ -379,10 +379,6 @@ async function openDetailPopup(cId) {
                 break;
         }
 
-
-
-
-
         // Modal anzeigen
         const modalElement = document.getElementById('detailModal');
         const modal = new bootstrap.Modal(modalElement);

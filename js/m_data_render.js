@@ -47,7 +47,7 @@ var m_data_render = (function () {
                         <td>${obj.contactEmail}</td>
                         <td>${obj.contactPhone}</td>
                         <td class="text-center">
-                            <button class="bi bi-eye buttonadress" data-id="${obj.id}">
+                            <button class="bi bi-eye buttonaddress" data-id="${obj.id}">
                             
                             </button>
                         </td>
@@ -60,17 +60,28 @@ var m_data_render = (function () {
                 `;
                 
             }); 
+
+            $("#table-title").html('Kundentabelle PoPokaka')
             $("#table-head").html(tableHead); 
             $("#table-body").html(rows);
 
-
+//Add click event to employee button ---------
             document.querySelectorAll('.buttonemployee').forEach(button => {
                 button.addEventListener('click', (e) => {
                     e.preventDefault();
-                    
                     const customerId = e.target.dataset.id;
                     
                     m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, customerId);
+                });
+            });
+
+//Add click event to addresses button ---------
+            document.querySelectorAll('.buttonaddress').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const customerId = e.target.dataset.id;
+                    
+                    m_data_get.getAddressesByCustomerId(m_data_render.renderAddresses, customerId);
                 });
             });
         } else {
@@ -86,19 +97,13 @@ var m_data_render = (function () {
 
         var customer
         
-
         if (!m_data_get.finishedWithError) {
             customer = m_data_get.dataStore.customerById;
-        
-
 
             $("#detailModalLabel").text(customer.companyName);
             $("#modal-email").text(customer.contactEmail);
             $("#modal-phone").text(customer.contactPhone);
         
-           
-            
-         
         } else {
             var alertHeading = "Error " + m_data_get.error.code;
             var alertText = m_data_get.error.message;
@@ -112,7 +117,6 @@ var m_data_render = (function () {
 
         if (!m_data_get.finishedWithError) {
             customer = m_data_get.dataStore.customerById;
-
 
             $("#edit-companyname").val(customer.companyName);
             $("#edit-email").val(customer.contactEmail);
@@ -130,19 +134,16 @@ var m_data_render = (function () {
 
 m_data_render.renderEmployeesById = function () {
 
-  
     var employee
 
     if (!m_data_get.finishedWithError) {
         var employee = m_data_get.dataStore.employeeById;
-
 
         const fullName = `${employee.firstName} ${employee.lastName}`; 
         $("#detailModalLabel").text(fullName);
         $("#modal-email").text(employee.eMail);
         $("#modal-phone").text(employee.phoneNumber);
         $("#modal-position").text(employee.position);
-
 
     } else {
         var alertHeading = "Error " + m_data_get.error.code;
@@ -158,7 +159,6 @@ m_data_render.renderEmployeesByIdFill = function () {
     if (!m_data_get.finishedWithError) {
         var employee = m_data_get.dataStore.employeeById;
         
-
         // $("#id").val(employee.id);
         $("#edit-employeesfirstName").val(employee.firstName);
         $("#edit-employeeslastName").val(employee.lastName);
@@ -181,7 +181,6 @@ m_data_render.renderEmployeesByIdFill = function () {
         if (!m_data_get.finishedWithError) {
             m_data_render.currentTable = "employees";
             employees = m_data_get.dataStore.employeesByCustomerId;
-            console.log("Ich bin eine Biene Teil 2")
             const tableHead = `
                 <tr>
                     <th>ID</th>
@@ -204,7 +203,7 @@ m_data_render.renderEmployeesByIdFill = function () {
                     </tr>
                 `;
             });
-                
+            $("#table-title").html('Mitarbeitertabelle')
             $("#table-head").html(tableHead); 
             $("#table-body").html(rows);
         } else {
@@ -215,49 +214,44 @@ m_data_render.renderEmployeesByIdFill = function () {
     };
 
     
+    m_data_render.renderAddresses = function (addresses) {
+        var addresses, rows;
 
-    // m_data_render.renderAddresses = function (addresses) {
+        if (!m_data_get.finishedWithError) {
+            m_data_render.currentTable = "addresses";
+             // get saved data
+            addresses = m_data_get.dataStore.addressesByCustomerId;
 
-    //     // do rendering
-    //     
-    //     var jsonObj, rows;
-
-    //     if (!m_data_get.finishedWithError) {
-    //         m_data_render.currentTable = "addresses";
-    //         // get saved data
-    //         jsonObj = m_data_get.dataStore;
-
-    //         const tableHead = `
-    //             <tr>
-    //                 <th>ID</th>
-    //                 <th>Postleitzahl</th>
-    //                 <th>Stadt</th>
-    //                 <th>Straße</th>
-    //                 <th>Hausnummer</th>
-    //             </tr>
-    //         `;
+            const tableHead = `
+                <tr>
+                    <th>ID</th>
+                    <th>Straße</th>
+                    <th>Postleitzahl</th>
+                    <th>Stadt</th>
+                </tr>
+            `;
             
-    //         jsonObj.forEach(obj => {
-    //              rows += `
-    //                 <tr>
-    //                     <td>${obj.id}</td>
-    //                     <td>${obj.postCode}</td>
-    //                     <td>${obj.city}</td>
-    //                     <td>${obj.street}</td>
-    //                     <td>${obj.houseNumber}</td>
-    //                 </tr> 
-    //             `;
+            addresses.forEach(obj => {
+                rows += `
+                    <tr>
+                        <td>${obj.id}</td>
+                        <td>${obj.street}</td>
+                        <td>${obj.postalCode}</td>
+                        <td>${obj.city}</td>
+                    </tr> 
+                `;
                 
-    //         });  
-           
-    //         $("#table-body").html(rows);
-    //     } else {
-    //         var alertHeading = "Error " + m_data_get.error.code;
-    //         var alertText = m_data_get.error.message;
+            });  
+            $("#table-title").html('Adressentabelle')
+            $("#table-head").html(tableHead); 
+            $("#table-body").html(rows);
+        } else {
+            var alertHeading = "Error " + m_data_get.error.code;
+            var alertText = m_data_get.error.message;
 
-    //         alert(alertHeading + ": " + alertText);
-    //     }
-    // };
+            alert(alertHeading + ": " + alertText);
+        }
+    };
 
 
     return m_data_render;
