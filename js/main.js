@@ -122,8 +122,14 @@ $(document).ready(function () {
         }
 
         console.log("löschen erfolgreich");
-    });
-
+    }); 
+    
+    
+    $("#button-back").click(function () {
+        console.log("Button gedrückt")
+        var renderFunc = m_data_render.renderCustomers;
+        m_data_get.getCustomers(renderFunc);
+    })
 });
 
 // Hinzugefügen von Wertem ----------------------------------------------------------------------------------------------------
@@ -369,4 +375,7 @@ async function openDetailPopup(cId) {
     } catch (error) {
         console.error('Fehler beim Laden der Benutzerdetails:', error);
     }
+
 }
+
+
