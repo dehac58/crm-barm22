@@ -234,6 +234,7 @@ m_data_render.renderEmployeesByIdFill = function () {
                     <th>Straße</th>
                     <th>Postleitzahl</th>
                     <th>Stadt</th>
+                    <th>Hauptstandort</th>
                 </tr>
             `;
             
@@ -244,6 +245,7 @@ m_data_render.renderEmployeesByIdFill = function () {
                         <td>${obj.street}</td>
                         <td>${obj.postalCode}</td>
                         <td>${obj.city}</td>
+                        <td>${obj.isHeadOffice}</td>
                     </tr> 
                 `;
                 

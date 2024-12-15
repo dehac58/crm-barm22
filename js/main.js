@@ -15,6 +15,9 @@ $(document).ready(function () {
             return;
         }
 
+        console.log("Hinzufügen")
+        console.log(m_data_render.currentTable)
+
         // Werte erfassen
         const formData = new FormData(form);
 
@@ -34,10 +37,14 @@ $(document).ready(function () {
                 m_data_post.postEmployee(() => {
                     m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
                 }, data);
-
-
                 break;
-
+            case "addresses":
+                console.log("Hilf mir")
+                console.log("adresses in hin", m_data_render.customerId)
+                m_data_post.postAddress(() => {
+                    m_data_get.getAddressesByCustomerId(m_data_render.renderAddresses, m_data_render.customerId);
+                }, m_data_render.customerId, data);
+                break;
             default:
                 break;
         }
@@ -65,14 +72,14 @@ $(document).ready(function () {
 
         switch (m_data_render.currentTable) {
             case "customers":
-                
+
                 m_data_put.putCustomerById(() => {
                     m_data_get.getCustomers(m_data_render.renderCustomers);
                 }, m_data_get.dataStore.customerById.id, data);
 
                 break;
             case "employees":
-              
+
                 m_data_put.putEmployeeById(() => {
                     m_data_get.getEmployeesByCustomerId(m_data_render.renderEmployees, m_data_render.customerId);
                 }, m_data_get.dataStore.employeeById.id, data);
@@ -173,20 +180,27 @@ document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) =>
         console.log('adresses')
         document.querySelector("#modal-body").innerHTML = `
         <form id="add-form">
-                        <div class="mb-3">
-                            <label for="add-addressstreet" class="form-label">Straße & Hausnummer</label>
-                            <input type="text" class="form-control" id="add-addressstreet" name="street">
-                        </div>
-                        <div class="mb-3">
-                            <label for="add-addresscity" class="form-label">Nachname</label>
-                            <input type="text" class="form-control" id="add-addresscity" name="city">
-                        </div>
-                        <div class="mb-3">
-                            <label for="add-addresspostalCode" class="form-label">Postleitzahl</label>
-                            <input type="text" class="form-control" id="add-addresspostalCode" name="postalCode">
-                        </div>
-                    </form>
+            <div class="mb-3">
+                <label for="add-addressstreet" class="form-label">Straße & Hausnummer</label>
+                <input type="text" class="form-control" id="add-addressstreet" name="street">
+            </div>
+            <div class="mb-3">
+                <label for="add-addresscity" class="form-label">Stadt</label>
+                <input type="text" class="form-control" id="add-addresscity" name="city">
+            </div>
+            <div class="mb-3">
+                <label for="add-addresspostalCode" class="form-label">Postleitzahl</label>
+                <input type="text" class="form-control" id="add-addresspostalCode" name="postalCode">
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="add-isHeadOffice" name="isHeadOffice">
+                    <label for="add-isHeadOffice" class="form-check-label">Handelt es sich um einen Hauptstandort?</label>
+                </div>
+            </div>
+        </form> 
         `
+        console.log("Kunde wird hinzugefügt");
     }
 
 });
@@ -207,7 +221,7 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
             var renderFunc = m_data_render.renderCustomerById
             m_data_get.getCustomerById(renderFunc, cId);
 
-      
+
             document.querySelector("#modal-body-edit").innerHTML = `
                     <p><strong>E-Mail:</strong> <span id="modal-email" ></span></p>
                     <p><strong>Telefonnummer:</strong> <span id="modal-phone"></span></p>
@@ -245,12 +259,6 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
             m_data_get.getEmployeeById(renderFunc, cId);
             console.log("m_data_render")
 
-            // customer = m_data_get.dataStore.customerById;
-            // e.preventDefault();
-            // var renderFunc = m_data_render.renderEmployeesById
-            // m_data_get.getEmployeesByCustomerId(renderFunc, cId);
-
-
             document.querySelector("#modal-body-edit").innerHTML = `
 
                     <p><strong>E-Mail:</strong> <span id="modal-email" ></span></p>
@@ -263,35 +271,52 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                 <form id="edit-form">
 
                         <div class="mb-3">
-                            <label for="add-employeesfirstName" class="form-label">Vorname</label>
+                            <label for="edit-employeesfirstName" class="form-label">Vorname</label>
                             <input type="text" class="form-control" id="edit-employeesfirstName" name="firstName">
                         </div>
                         <div class="mb-3">
-                            <label for="add-employeeslastName" class="form-label">Nachname</label>
+                            <label for="edit-employeeslastName" class="form-label">Nachname</label>
                             <input type="text" class="form-control" id="edit-employeeslastName" name="lastName">
                         </div>
                         <div class="mb-3">
-                            <label for="add-employeesposition" class="form-label">Position</label>
+                            <label for="edit-employeesposition" class="form-label">Position</label>
                             <input type="text" class="form-control" id="edit-employeesposition" name="position">
                         </div>
                         <div class="mb-3">
-                            <label for="add-employeesphoneNumber" class="form-label">Telefonnummer</label>
+                            <label for="edit-employeesphoneNumber" class="form-label">Telefonnummer</label>
                             <input type="text" class="form-control" id="edit-employeesphoneNumber" name="phoneNumber">
                         </div>
                         <div class="mb-3">
-                            <label for="add-employeesMail" class="form-label">E-Mail Adresse</label>
+                            <label for="edit-employeesMail" class="form-label">E-Mail Adresse</label>
                             <input type="email" class="form-control" id="edit-employeesMail" name="eMail">
                         </div>
                             </form>
         `;
 
-        console.log(`ID Mitarbeiter geklickt: ${cId}`)
+            console.log(`ID Mitarbeiter geklickt: ${cId}`)
             openDetailPopup(cId)
             console.log("Edit-Form wurde aufgerufen");
         }
         else if (m_data_render.currentTable === "addresses") {
             console.log('employees')
             document.querySelector("#modal-body").innerHTML = `
+
+
+             <form id="edit-form">
+
+                        <div class="mb-3">
+                            <label for="edit-addressstreet" class="form-label">Straße & Hausnummer</label>
+                            <input type="text" class="form-control" id="add-addressstreet" name="street">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-addresscity" class="form-label">Nachname</label>
+                            <input type="text" class="form-control" id="add-addresscity" name="city">
+                        </div>
+                        <div class="mb-3">
+                            <label for="edit-addresspostalCode" class="form-label">Postleitzahl</label>
+                            <input type="text" class="form-control" id="add-addresspostalCode" name="postalCode">
+                        </div>
+                    </form>
         
         `
         }
@@ -346,3 +371,14 @@ async function openDetailPopup(cId) {
         console.error('Fehler beim Laden der Benutzerdetails:', error);
     }
 }
+
+$("#button-back").click(function(){
+
+    console.log("#button-backclicked.");
+
+    var renderFunc = m_data_render.renderCustomers;
+
+    m_data_get.getCustomers(renderFunc);
+
+
+  });
