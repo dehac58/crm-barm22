@@ -51,7 +51,7 @@ $(document).ready(function () {
                     m_data_crud.getAddressesByCustomerId(m_data_render.renderAddresses, m_data_render.customerId);
                 }, m_data_render.customerId, {
                     ...data,
-                    isHeadOffice: data.isHeadOffice ? 1 : 0
+                    isHeadOffice: $("#edit-isHeadOffice").is(':checked') ? 1 : 0
                 });
                 break;
             default:
