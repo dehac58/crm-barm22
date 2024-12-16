@@ -70,7 +70,6 @@ $(document).ready(function () {
             return;
         }
 
-        // Werte erfassen
         const formData = new FormData(form);
         let isValid = true;
         const data = {};
@@ -117,7 +116,6 @@ $(document).ready(function () {
                 break;
         }
 
-        console.log(data); // Ausgabe der Daten
     });
 
 
@@ -366,9 +364,6 @@ document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) =>
 document.querySelector('#table-body').addEventListener('click', (e) => {
     if (e.target && e.target.classList.contains('id-link')) {
         const id = e.target.dataset.id;
-        console.log(`ID geklickt: ${id}`);
-
-        
 
         if (m_data_render.currentTable === "customers") {
             e.preventDefault();
@@ -383,7 +378,7 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                         <h4>Bearbeite die Daten:</h6>
                     </div> 
 
-        <form id="edit-form">
+                            <form id="edit-form">
 
                                 <div class="mb-3">
                                     <label for="edit-companyname" class="form-label">Firmenname</label>
@@ -403,8 +398,7 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
             openDetailPopup(id)
             console.log("Edit-Form wurde aufgerufen");
         } else if (m_data_render.currentTable === "employees") {
-            console.log('employees')
-            console.log(`ID geklickt: ${id}`);
+
 
             e.preventDefault();
 
@@ -440,15 +434,14 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                             <input type="text" class="form-control" id="edit-employeesphoneNumber" name="phoneNumber">
                         </div>
                         <div class="mb-3">
-                            <label for="edit-employeesMail" class="form-label">E-Mail Adresse</label>
+                            < for="edit-employeesMail" class="form-label">E-Mail Adresse</label>
                             <input type="email" class="form-control" id="edit-employeesMail" name="eMail">
                         </div>
                             </form>
-        `;
+            `;
 
             openDetailPopup(id)
-        }
-        else if (m_data_render.currentTable === "addresses") {
+        } else if (m_data_render.currentTable === "addresses") {
             e.preventDefault();
             var renderFunc = m_data_render.renderAddressesById
             m_data_crud.getAddressById(renderFunc, id);
@@ -492,8 +485,6 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
 
 async function openDetailPopup(id) {
     try {
-        console.log("openDetailPopup")
-        // Zeige den Bearbeiten-Button und setze die Werte in das Formular
         document.getElementById('edit-form').style.display = 'none';
         document.getElementById('edit-button').style.display = 'inline-block';
         document.getElementById('save-button').style.display = 'none';
@@ -525,7 +516,6 @@ async function openDetailPopup(id) {
                 };
 
                 break;
-
             case "addresses":
                 editButton.onclick = () => {
                     console.log("Ich brauch Daten der Adresse", id)
@@ -542,7 +532,6 @@ async function openDetailPopup(id) {
                 break;
         }
 
-        // Modal anzeigen
         const modalElement = document.getElementById('detailModal');
         const modal = new bootstrap.Modal(modalElement);
         modal.show();

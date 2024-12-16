@@ -30,10 +30,8 @@ var m_data_render = (function () {
 
         if (!m_data_crud.finishedWithError) {
             m_data_render.currentTable = "customers";
-            // get saved data
             customers = m_data_crud.dataStore.customers;
             
-
             const tableHead = `
                 <tr>
                     <th>ID</th>
@@ -117,6 +115,7 @@ var m_data_render = (function () {
             alert(alertHeading + ": " + alertText);
         }
     };
+
     m_data_render.renderCustomerByIdFill = function () {
 
         var customer
@@ -135,96 +134,6 @@ var m_data_render = (function () {
             alert(alertHeading + ": " + alertText);
         }
     };
-
-// render edit-Popup Employees ------------------------------------------------------------------------------------------------
-
-m_data_render.renderEmployeesById = function () {
-
-    var employee
-
-    if (!m_data_crud.finishedWithError) {
-        var employee = m_data_crud.dataStore.employeeById;
-
-        const fullName = `${employee.firstName} ${employee.lastName}`; 
-        $("#detailModalLabel").text(fullName);
-        $("#modal-email").text(employee.eMail);
-        $("#modal-phone").text(employee.phoneNumber);
-        $("#modal-position").text(employee.position);
-
-    } else {
-        var alertHeading = "Error " + m_data_crud.error.code;
-        var alertText = m_data_crud.error.message;
-
-        alert(alertHeading + ": " + alertText);
-    }
-};
-m_data_render.renderEmployeesByIdFill = function () {
-
-    var employee
-
-    if (!m_data_crud.finishedWithError) {
-        var employee = m_data_crud.dataStore.employeeById;
-        
-        
-        $("#edit-employeesfirstName").val(employee.firstName);
-        $("#edit-employeeslastName").val(employee.lastName);
-        $("#edit-employeesMail").val(employee.eMail);
-        $("#edit-employeesphoneNumber").val(employee.phoneNumber);
-        $("#edit-employeesposition").val(employee.position);       
-    
-    } else {
-        var alertHeading = "Error " + m_data_crud.error.code;
-        var alertText = m_data_crud.error.message;
-
-        alert(alertHeading + ": " + alertText);
-    }
-};
-
-// render edit-Popup Adresses -------------------------------------------------------------------------------------------------
-
-m_data_render.renderAddressesById = function () {
-    var address;
-
-    if (!m_data_crud.finishedWithError) {
-        var address = m_data_crud.dataStore.addressById;
-        console.log(address.city)
-        $("#detailModalLabel").text("Adresse");
-        $("#modal-city").text(address.city);
-        $("#modal-street").text(address.street);
-        $("#modal-postalCode").text(address.postalCode);
-        $("#modal-isHeadOffice").text(address.isHeadOffice);
-
-    } else {
-        var alertHeading = "Error " + m_data_crud.error.code;
-        var alertText = m_data_crud.error.message;
-
-        alert(alertHeading + ": " + alertText);
-    }
-};
-m_data_render.renderAddressesByIdFill = function () {
-    if (!m_data_crud.finishedWithError) {
-        var address = m_data_crud.dataStore.addressById;
-
-        // Felder ausfüllen
-        $("#edit-addressescity").val(address.city);
-        $("#edit-addressesstreet").val(address.street);
-        $("#edit-addresspostalCode").val(address.postalCode);
-
-        // Checkbox-Status setzen
-        var isHeadOffice = address.isHeadOffice == 1; // true, wenn 1; false, wenn 0
-        $("#edit-isHeadOffice").prop('checked', isHeadOffice);
-
-        // Wert synchronisieren
-        $("#edit-isHeadOffice").val(isHeadOffice ? 'true' : 'false');
-    
-    } else {
-        var alertHeading = "Error " + m_data_crud.error.code;
-        var alertText = m_data_crud.error.message;
-
-        alert(alertHeading + ": " + alertText);
-    }
-};
-
 
 // render Employees -----------------------------------------------------------------------------------------------------------
     m_data_render.renderEmployees = function () {
@@ -261,6 +170,50 @@ m_data_render.renderAddressesByIdFill = function () {
         } else {
             var alertHeading = "Error " + m_data_crud.error.code;
             var alertText = m_data_crud.error.message;
+            alert(alertHeading + ": " + alertText);
+        }
+    };
+
+// render edit-Popup Employees ------------------------------------------------------------------------------------------------
+
+    m_data_render.renderEmployeesById = function () {
+
+        var employee
+
+        if (!m_data_crud.finishedWithError) {
+            var employee = m_data_crud.dataStore.employeeById;
+
+            const fullName = `${employee.firstName} ${employee.lastName}`; 
+            $("#detailModalLabel").text(fullName);
+            $("#modal-email").text(employee.eMail);
+            $("#modal-phone").text(employee.phoneNumber);
+            $("#modal-position").text(employee.position);
+
+        } else {
+            var alertHeading = "Error " + m_data_crud.error.code;
+            var alertText = m_data_crud.error.message;
+
+            alert(alertHeading + ": " + alertText);
+        }
+    };
+    m_data_render.renderEmployeesByIdFill = function () {
+
+        var employee
+
+        if (!m_data_crud.finishedWithError) {
+            var employee = m_data_crud.dataStore.employeeById;
+            
+            
+            $("#edit-employeesfirstName").val(employee.firstName);
+            $("#edit-employeeslastName").val(employee.lastName);
+            $("#edit-employeesMail").val(employee.eMail);
+            $("#edit-employeesphoneNumber").val(employee.phoneNumber);
+            $("#edit-employeesposition").val(employee.position);       
+        
+        } else {
+            var alertHeading = "Error " + m_data_crud.error.code;
+            var alertText = m_data_crud.error.message;
+
             alert(alertHeading + ": " + alertText);
         }
     };
@@ -303,7 +256,51 @@ m_data_render.renderAddressesByIdFill = function () {
             alert(alertHeading + ": " + alertText);
         }
     };
+    // render edit-Popup Adresses -------------------------------------------------------------------------------------------------
 
+    m_data_render.renderAddressesById = function () {
+        var address;
+
+        if (!m_data_crud.finishedWithError) {
+            var address = m_data_crud.dataStore.addressById;
+            console.log(address.city)
+            $("#detailModalLabel").text("Adresse");
+            $("#modal-city").text(address.city);
+            $("#modal-street").text(address.street);
+            $("#modal-postalCode").text(address.postalCode);
+            $("#modal-isHeadOffice").text(address.isHeadOffice);
+
+        } else {
+            var alertHeading = "Error " + m_data_crud.error.code;
+            var alertText = m_data_crud.error.message;
+
+            alert(alertHeading + ": " + alertText);
+        }
+    };
+
+    m_data_render.renderAddressesByIdFill = function () {
+        if (!m_data_crud.finishedWithError) {
+            var address = m_data_crud.dataStore.addressById;
+
+            // Felder ausfüllen
+            $("#edit-addressescity").val(address.city);
+            $("#edit-addressesstreet").val(address.street);
+            $("#edit-addresspostalCode").val(address.postalCode);
+
+            // Checkbox-Status setzen
+            var isHeadOffice = address.isHeadOffice == 1; // true, wenn 1; false, wenn 0
+            $("#edit-isHeadOffice").prop('checked', isHeadOffice);
+
+            // Wert synchronisieren
+            $("#edit-isHeadOffice").val(isHeadOffice ? 'true' : 'false');
+        
+        } else {
+            var alertHeading = "Error " + m_data_crud.error.code;
+            var alertText = m_data_crud.error.message;
+
+            alert(alertHeading + ": " + alertText);
+        }
+    };
 
     return m_data_render;
 
