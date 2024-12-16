@@ -72,12 +72,25 @@ $(document).ready(function () {
 
         // Werte erfassen
         const formData = new FormData(form);
-
-        // Konvertiere FormData in JSON
+        let isValid = true;
         const data = {};
+
+        
         formData.forEach((value, key) => {
-            data[key] = value;
+            data[key] = value; 
+            if (value === '') { 
+                isValid = false;
+                const inputField = form.querySelector([name="${key}"]);
+                if (inputField) {
+                    inputField.classList.add('is-invalid'); 
+                }
+            }
         });
+
+        if (!isValid) {
+            alert('Bitte füllen Sie alle Felder aus.');
+            return;
+        }
 
         switch (m_data_render.currentTable) {
             case "customers":
@@ -108,7 +121,7 @@ $(document).ready(function () {
     });
 
 
-    // EventListener für löschen von Werten ---------------------------------------------------------------------------------------
+    // EventListener für löschen von Werten -----------------------------------------------------------------------------------
     document.querySelector("#delete-button").addEventListener('click', (e) => {
         const form = document.querySelector('#edit-form');
         if (!form) {
@@ -139,7 +152,130 @@ $(document).ready(function () {
         console.log("löschen erfolgreich");
     });
 
+    // Validierung der Eingaben -----------------------------------------------------------------------------------------------
 
+    function validateFormFields(formId) {
+        const form = document.querySelector(formId);
+        if (!form) {
+            return false;
+        }
+    
+        const inputs = form.querySelectorAll('input, select, textarea');
+        let isValid = true;
+    
+        inputs.forEach(input => {
+            input.classList.remove('is-invalid');
+            let feedback = input.nextElementSibling;
+            if (feedback && feedback.classList.contains('invalid-feedback')) {
+                feedback.remove();
+            }
+    
+            if (input.value.trim() === '') {
+                isValid = false;
+                input.classList.add('is-invalid');
+    
+                feedback = document.createElement('div');
+                feedback.classList.add('invalid-feedback');
+                feedback.textContent = 'Dieses Feld darf nicht leer sein.';
+                input.parentNode.appendChild(feedback);
+            } else if (input.type === 'email' && !validateEmail(input.value.trim())) {
+                isValid = false;
+                input.classList.add('is-invalid'); 
+    
+                feedback = document.createElement('div');
+                feedback.classList.add('invalid-feedback');
+                feedback.textContent = 'Bitte geben Sie eine gültige E-Mail-Adresse ein.';
+                input.parentNode.appendChild(feedback);
+            } else if (input.name.toLowerCase().includes('phone') && !validatePhoneNumber(input.value.trim())) {
+                isValid = false;
+                input.classList.add('is-invalid');
+
+                feedback = document.createElement('div');
+                feedback.classList.add('invalid-feedback');
+                feedback.textContent = 'Telefonnummer darf nur Zahlen, Leerzeichen und + enthalten.';
+                input.parentNode.appendChild(feedback);
+            }
+        });
+    
+        return isValid;
+    }
+    
+    function validateEmail(email) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    }
+    
+    function validatePhoneNumber(phone) {
+        const phoneRegex = /^[0-9+\s]+$/;
+        return phoneRegex.test(phone);
+    }
+    
+    const submitButton = document.querySelector('#submitBtn');
+    const saveButton = document.querySelector('#save-button');
+    const modalAdd = document.querySelector('#buttonaddnewcustomer');
+    const modalEdit = document.querySelector('#detailModal');
+    
+    if (submitButton) {
+        submitButton.addEventListener('click', (e) => {
+            e.preventDefault(); 
+            if (validateFormFields('#add-form')) {
+                console.log('Formular ist gültig. Daten können gesendet werden.');
+                if (modalAdd) {
+                    const bootstrapModal = bootstrap.Modal.getInstance(modalAdd);
+                    bootstrapModal.hide();
+                }
+            } else {
+                console.log('Formular ist ungültig. Daten werden nicht gesendet.');
+            }
+        });
+    }
+    
+    if (saveButton) {
+        saveButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (validateFormFields('#edit-form')) {
+                if (modalEdit) {
+                    const bootstrapModal = bootstrap.Modal.getInstance(modalEdit);
+                    bootstrapModal.hide();
+                }
+            } else {
+                console.log('Formular ist ungültig. Änderungen werden nicht gespeichert.');
+            }
+        });
+    }
+    
+    async function safeSubmitForm(callback, formId, modal) {
+        if (validateFormFields(formId)) {
+            await callback();
+            if (modal) {
+                const bootstrapModal = bootstrap.Modal.getInstance(modal);
+                bootstrapModal.hide();
+            }
+        } else {
+            console.log('Formular ist ungültig. Vorgang wird abgebrochen.');
+        }
+    }
+    
+    if (submitButton) {
+        submitButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            safeSubmitForm(() => {
+                console.log('Formular erfolgreich hinzugefügt.');
+            }, '#add-form', modalAdd);
+        });
+    }
+    
+    if (saveButton) {
+        saveButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            safeSubmitForm(() => {
+                console.log('Änderungen erfolgreich gespeichert.');
+            }, '#edit-form', modalEdit);
+        });
+    }
+    
+
+// Zurückbutton ---------------------------------------------------------------------------------------------------------------
     $("#button-back").click(function () {
         console.log("Button gedrückt")
         var renderFunc = m_data_render.renderCustomers;
@@ -222,7 +358,7 @@ document.querySelector('.buttonaddnewcustomer').addEventListener('click', (e) =>
         `
         console.log("Kunde wird hinzugefügt");
     }
-
+    
 });
 
 
