@@ -1,43 +1,210 @@
+.html {
+    height: auto;
+    width: auto;
+}
+
 .buttonaddnewcustomer {
     position: fixed;
     bottom: 4%;
     right: 4%;
     z-index: 1000;
-    height: 5vw;
-    width: 5vw;
-    border-radius: 3vw;
+    height: 60px;
+    width: 60px;
+    border-radius: 30px;
     cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 4vw;
-}
-/* Stil für den responsiven Bereich */
-.table-responsive {
-    overflow-x: auto; /* Ermöglicht das horizontale Scrollen der Tabelle */
+    font-size: 45px;
 }
 
+.button-back {
+    position: fixed;
+    top: 2%;
+    left: 4%;
+    z-index: 1000;
+    height: 60px;
+    width: 60px;
+    padding: 0;
+    display: none;
+    background-color: transparent;
+    border-color: transparent;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
+
+.button-back:hover {
+    transform: scale(1.10);
+    transition-duration: 0, 5s;
+}
+
+#bi-arrow-left {
+    color: #0056b3;
+    font-size: 60px;
+    font-weight: 800;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#bi-arrow-left:hover {
+    color: white;
+    transition-duration: 0, 5s;
+}
+
+.buttonaddnewcustomer:hover {
+    transform: scale(1.10);
+    background-color: #0056b3;
+    transition-duration: 0, 5s;
+}
+
+#placeholder{
+    height: 100px;
+    width: auto;
+}
+
+
 /* Modalfenster für kleinere Bildschirme anpassen */
+@media (max-width: 1050px) {
+    .buttonaddnewcustomer {
+        position: fixed;
+        bottom: 2%;
+        right: 2%;
+        z-index: 1050;
+        height: 80px;
+        width: 80px;
+        border-radius: 40px;
+        font-size: 10vw;
+    }
+
+    #bi-arrow-left {
+        font-size: 8vw;
+    }
+
+    #bi-arrow-left:hover {
+        color: transparent;
+    }
+
+    .button-back:hover {
+        color: white;
+    }
+
+    .id-link {
+        font-size: 25px;
+    }
+
+    .buttonaddress {
+        font-size: 4vw;
+    }
+
+    .buttonemployee {
+        font-size: 4vw;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    td>.id-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        line-height: normal;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
 @media (max-width: 768px) {
     .modal-dialog {
-        max-width: 90%; /* Modal Dialog nimmt auf mobilen Geräten mehr Platz ein */
+        max-width: 90%;
+        /* Modal Dialog nimmt auf mobilen Geräten mehr Platz ein */
     }
 
     .buttonaddnewcustomer {
         position: fixed;
-        bottom: 20px;
-        right: 20px;
+        bottom: 2%;
+        right: 2%;
         z-index: 1050;
+        height: 80px;
+        width: 80px;
+        border-radius: 40px;
+        font-size: 10vw;
+    }
+
+    .button-back {
+        position: fixed;
+        top: 2%;
+        left: 2%;
+        z-index: 1000;
+        height: 60px;
+        width: 60px;
+        padding: 0;
+        display: none;
+        background-color: transparent;
+        border-color: transparent;
+        cursor: pointer;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .buttonaddress {
+        font-size: 5vw;
+    }
+
+    .buttonemployee {
+        font-size: 5vw;
+    }
+
+    td>.id-link {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        line-height: normal;
+        margin: 0;
+        padding: 0;
+    }
+
+    #bi-arrow-left {
+        font-size: 12vw;
+        top: 4%;
+    }
+
+    #bi-arrow-left:hover {
+        color: transparent;
+    }
+
+    .button-back:hover {
+        color: white;
+    }
+
+    .container {
+        padding-left: 5px;
+        padding-right: 5px;
     }
 }
 
 /* Für sehr kleine Geräte */
 @media (max-width: 480px) {
     .table-responsive {
-        font-size: 12px; /* Verkleinert die Schriftgröße der Tabelle */
+        font-size: 12px;
+        /* Verkleinert die Schriftgröße der Tabelle */
     }
 
     .modal-dialog {
-        max-width: 100%; /* Modalfenster nimmt den gesamten Bildschirm ein */
+        max-width: 100%;
+        /* Modalfenster nimmt den gesamten Bildschirm ein */
     }
 }

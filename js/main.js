@@ -368,6 +368,8 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
         const id = e.target.dataset.id;
         console.log(`ID geklickt: ${id}`);
 
+        
+
         if (m_data_render.currentTable === "customers") {
             e.preventDefault();
             var renderFunc = m_data_render.renderCustomerById
