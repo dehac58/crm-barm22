@@ -132,7 +132,7 @@ class CustomerService
             $stmtDeleteAddress->execute([':addressId' => $addressId]);
         }
 
-        $sqlEmployeeUpdate = "UPDATE Employees SET customerID = NULL WHERE customerID = :customerId";
+        $sqlEmployeeUpdate = "DELETE FROM Employees WHERE customerID = :customerId";
         $stmtEmployeeUpdate = $this->pdo->prepare($sqlEmployeeUpdate);
         $stmtEmployeeUpdate->execute([':customerId' => $id]);
 
