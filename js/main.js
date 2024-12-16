@@ -434,7 +434,7 @@ document.querySelector('#table-body').addEventListener('click', (e) => {
                             <input type="text" class="form-control" id="edit-employeesphoneNumber" name="phoneNumber">
                         </div>
                         <div class="mb-3">
-                            < for="edit-employeesMail" class="form-label">E-Mail Adresse</label>
+                            <label for="edit-employeesMail" class="form-label">E-Mail Adresse</label>
                             <input type="email" class="form-control" id="edit-employeesMail" name="eMail">
                         </div>
                             </form>
