@@ -49,13 +49,6 @@ class EmployeeService
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // UPDATE - Einen Benutzer aktualisieren
-//    public function updateEmployee($id, $data)
-//    {
-//        $sql = "UPDATE Employees SET name = :name, email = :email WHERE id = :id";
-//        $stmt = $this->pdo->prepare($sql);
-//        return $stmt->execute([':id' => $data["id"], ':firstName' => $data['firstName'], ':lastName' => $data['lastName'], ":position" => $data['position'], ":phoneNumber" => $data['phoneNumber'], ":eMail" => $data['eMail'], "customerID" => $data['customerID']]);
-//    }
     
     // UPDATE - Einen Benutzer aktualisieren
     public function updateEmployee($id, $data)
